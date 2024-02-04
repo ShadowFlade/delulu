@@ -1,0 +1,22 @@
+{{ block "scripts" . }}
+<script
+  src="https://unpkg.com/htmx.org@1.9.8"
+  integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
+  crossorigin="anonymous"
+></script>
+{{ end }} 
+
+{{ block "index" . }}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {{ template "scripts" . }}
+    </head>
+    <body>
+        {{ template "subscribe-body" . }}
+    </body>
+</html>
+{{ end }}

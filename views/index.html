@@ -1,22 +1,49 @@
-{{ block "scripts" . }}
-<script
-  src="https://unpkg.com/htmx.org@1.9.8"
-  integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
-  crossorigin="anonymous"
-></script>
-{{ end }} 
-
-{{ block "index" . }}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <title></title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        {{ template "scripts" . }}
-    </head>
-    <body>
-        {{ template "subscribe-body" . }}
-    </body>
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</head>
+	<body>
+		<div class="header">
+			<div class="container">
+				<ul class="header__menu">
+					<li class="header__item">О проекте</li>
+					<li class="header__item">Ссылки</li>
+				</ul>
+			</div>
+		</div>
+		<div class="container">
+			<div class="top-block">
+				<h1 class="title">Калькулятор женского заблуждения</h1>
+				<div class="main-image__wrapper">
+					<img src="" alt="" class="main-image" />
+				</div>
+				<h2 class="title__secondary">
+					Каковы шансы найти мужчину своей мечты?
+				</h2>
+			</div>
+		</div>
+		<article class="calculator">
+			<div class="calculator__items">
+				<div class="calculator__item">
+					<h3 class="calculator__title">Возраст</h3>
+                    
+				</div>
+				<div class="calculator__item">
+					<h3 class="calculator__title">Этническая принадлежность</h3>
+				</div>
+				<div class="calculator__item">
+					<h3 class="calculator__title">Рост</h3>
+				</div>
+				<div class="calculator__item">
+					<h3 class="calculator__title">Доход</h3>
+				</div>
+				<div class="calculator__item">
+					<h3 class="calculator__title">Наличие машины</h3>
+				</div>
+			</div>
+		</article>
+	</body>
 </html>
-{{ end }}

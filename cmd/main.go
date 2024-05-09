@@ -1,25 +1,49 @@
 package main
-import (
-    "html/template"
-    "io--primary: #005b99;
---important:#ff7f00; 
---bg:#f7f7f7;
---border:#d3d3d3; 
---stand-out:#ffcc00;
-"
-    "time"
 
-    "github.com/labstack/echo/v4"
-    "github.com/labstack/echo/v4/middleware"
+import (
+	"html/template"
+	"io"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
-type Template struct {
-    tmpls *template.Template
+type Templates struct {
+	templates *template.Template
 }
 
-func (t *Template) Render (w io.Writer, name string, data interface{}, c echo.Context) error  {
-    return t.tmpls.ExecuteTemplate( w, name , data )
+func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
 }
 
+func newTemplate() *Templates {
+	return &Templates{
+		// templates: template.Must(template.ParseGlob("views/*.html")),
+	//	templates: template.Must(template.ParseFiles( this works, but above does not 
+	//		"views/index.html",
+	//		"views/blocks/content.html",
+	//		"views/blocks/header.html",
+	//	)),
+	}
+}
 
+type Page struct{}
 
+func newPage() Page {
+	return Page{}
+}
+
+func main() {
+	e := echo.New()
+	e.Use(middleware.Logger())
+	page := newPage()
+	e.Renderer = newTemplate()
+
+	e.Static("/static", "static")
+
+	e.GET("/", func(c echo.Context) error {
+		return c.Render(200, "index", page)
+	})
+
+	e.Logger.Fatal(e.Start(":42069"))
+}

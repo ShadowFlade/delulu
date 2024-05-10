@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"io"
+	"path/filepath"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -18,7 +20,8 @@ func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Co
 
 func newTemplate() *Templates {
 	return &Templates{
-		// templates: template.Must(template.ParseGlob("views/*.html")),
+		templates: template.Must(template.ParseGlob("views/*.html")),
+
 	//	templates: template.Must(template.ParseFiles( this works, but above does not 
 	//		"views/index.html",
 	//		"views/blocks/content.html",
@@ -37,6 +40,7 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 	page := newPage()
+    fmt.Println(filepath.Match("./views/**/*.html","./views/blocks/content.html"));
 	e.Renderer = newTemplate()
 
 	e.Static("/static", "static")

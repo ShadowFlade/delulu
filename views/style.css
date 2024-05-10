@@ -1,7 +1,20 @@
+html {
+  font-size: 12px;
+}
+body {
+  background-color: var(--primary);
+}
 :root {
-	--primary: #005b99;
-	--important: #ff7f00;
-	--bg: #f7f7f7;
-	--border: #d3d3d3;
-	--stand-out: #ffcc00;
+  --primary: rgb(216, 78, 168);
+  --secondary1: rgb(78, 216, 168);
+  --secondary2: rgb(168, 216, 78);
+  --bg: rgb(240, 240, 240);
+  --border: rgb(200, 200, 200);
+}
+.container {
+  padding-inline: 1.5rem;
+}
+.header__menu {
+  display: flex;
+  gap: 1.5rem;
 }

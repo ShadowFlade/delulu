@@ -1,0 +1,43 @@
+{{ block "content" . }} {{ template "header" . }}
+
+<div class="container">
+    <div class="top-block">
+        <h1 class="title">Калькулятор женского заблуждения</h1>
+        <div class="main-image__wrapper">
+            <img src="/static/img/home_screen.png" alt="" class="main-image" />
+        </div>
+        <h2 class="title title--secondary">
+            Каковы шансы найти мужчину своей мечты?
+        </h2>
+    </div>
+</div>
+
+<article class="calculator">
+    <div class="container">
+        <div class="calculator__items">
+            <div class="calculator__item">
+                <h3 class="calculator__title">Возраст</h3>
+                <div class="calculator__range">
+                    <div class="calculator__range-container">
+                        <input min="150" max="220" type="range"
+                            class="calculator__range-input js-calculator__range-input" />
+                        <span class="js-range-input__label range-input__label"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="calculator__item">
+                <h3 class="calculator__title">Этническая принадлежность</h3>
+            </div>
+            <div class="calculator__item">
+                <h3 class="calculator__title">Рост</h3>
+            </div>
+            <div class="calculator__item">
+                <h3 class="calculator__title">Доход</h3>
+            </div>
+            <div class="calculator__item">
+                <h3 class="calculator__title">Наличие машины</h3>
+            </div>
+        </div>
+    </div>
+</article>
+{{ end }}

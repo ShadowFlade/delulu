@@ -20,10 +20,11 @@
                 <div class="calculator__range">
                     <div class="calculator__range-container">
                         <input
-                            min="150"
-                            max="220"
+                            min="19"
+                            max="60"
                             type="range"
                             class="calculator__range-input js-calculator__range-input"
+                            name="age"
                         />
                         <span class="js-range-input__label range-input__label"></span>
                     </div>
@@ -31,15 +32,143 @@
             </div>
             <div class="calculator__item">
                 <h3 class="calculator__title">Этническая принадлежность</h3>
+                <div class="calculator__input-group">
+                    <label for="" class="calculator__label calculator__label">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="race"
+                            value="russian"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Русский</span>
+                    </label>
+                    <label for="" class="calculator__label calculator__label">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="race"
+                            value="middle_asian"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Средняя Азия</span>
+                    </label>
+                    <label for="" class="calculator__label calculator__label">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="race"
+                            value="asian"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Азиат</span>
+                    </label>
+                    <label for="" class="calculator__label calculator__label">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="race"
+                            value="black"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Черный</span>
+                    </label>
+                    <label for="" class="calculator__label calculator__label">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="race"
+                            value="latino"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Латиноамериканец</span>
+                    </label>
+                    <label for="" class="calculator__label calculator__label calculator__label--margin">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="race"
+                            value="any"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Не важно</span>
+                    </label>
+                </div>
             </div>
             <div class="calculator__item">
                 <h3 class="calculator__title">Рост</h3>
+                <div class="calculator__input-group">
+                    <div class="calculator__range">
+                        <div class="calculator__range-container">
+                            <input
+                                min="150"
+                                max="220"
+                                type="range"
+                                class="calculator__range-input js-calculator__range-input"
+                                name="height"
+                            />
+
+                            <span class="js-range-input__label range-input__label"></span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
             <div class="calculator__item">
                 <h3 class="calculator__title">Доход</h3>
+                <div class="calculator__input-group">
+                    <div class="calculator__range">
+                        <div class="calculator__range-container">
+                            <input
+                                min="0"
+                                max="1000000"
+                                step="1"
+                                type="range"
+                                data-type="money"
+                                class="calculator__range-input js-calculator__range-input"
+                                name="money"
+                            />
+
+                            <span class="js-range-input__label range-input__label"></span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
             <div class="calculator__item">
                 <h3 class="calculator__title">Наличие машины</h3>
+                <div class="calculator__input-group">
+                    <label for="" class="calculator__label calculator__label">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="car"
+                            value="yes"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Есть машина</span>
+                    </label>
+                    <label for="" class="calculator__label calculator__label">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="car"
+                            value="no"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Нет машины</span>
+                    </label>
+                    <label for="" class="calculator__label calculator__label calculator__label--margin">
+                        <input
+                            class="calculator__radio calculator__radio--race js-calculator__radio"
+                            type="radio"
+                            name="car"
+                            value="idc"
+                        />
+                        <span class="calculator__fake-radio"></span>
+                        <span class="calculator__radio-value">Не важно</span>
+                    </label>
+                </div>
             </div>
         </div>
     </div>

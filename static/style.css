@@ -1,78 +1,91 @@
 :root {
-  --primary: rgb(216, 78, 168);
-  --secondary1: rgb(78, 216, 168);
-  --secondary2: rgb(168, 216, 78);
-  --bg: rgb(240, 240, 240);
-  --border: rgb(200, 200, 200);
-  --text: white;
-  --textBlack: rgb(216, 78, 168);
+    --primary: rgb(216, 78, 168);
+    --secondary1: rgb(78, 216, 168);
+    --secondary2: rgb(168, 216, 78);
+    --bg: rgb(240, 240, 240);
+    --border: rgb(200, 200, 200);
+    --text: white;
+    --textBlack: rgb(216, 78, 168);
 }
 
 body {
-  background-color: var(--primary);
-  font-size: 20px;
-  color: var(--text);
+    background-color: var(--primary);
+    font-size: 20px;
+    color: var(--text);
 }
 
 img {
-  width: 100%;
+    width: 100%;
 }
 
 .header {
-  margin-bottom: 2rem;
-  width: fit-content;
-  margin-inline: auto;
+    margin-bottom: 2rem;
+    width: fit-content;
+    margin-inline: auto;
 }
 
 .header__menu {
-  padding: 2rem 0 2rem;
+    padding: 2rem 0 2rem;
 }
 
 .container {
-  padding-inline: 10rem;
+    padding-inline: 10rem;
 }
 
 .header__menu {
-  display: flex;
-  gap: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
 }
 
 .title {
-  margin-bottom: 2rem;
-  text-align: center;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .title--secondary {
-  margin-bottom: 2rem;
-  margin-top: 2rem;
-  text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    text-align: center;
 }
 
 .calculator__items {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
 }
 .calculator__item {
-  background-color: rgb(225, 91, 178);
-  padding: 1.5rem;
-  border-radius: 8px;
+    background-color: rgb(225, 91, 178);
+    padding: 1.5rem;
+    border-radius: 8px;
 }
 .range-input__label {
-  position: absolute;
-  top: 5px;
-  left: 0;
-  min-width: 20px;
-  width: fit-content;
-  height: 20px;
-  transform: var(--ratio);
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 20px;
+    width: fit-content;
+    transform: var(--ratio);
+    position: absolute;
+    display: block;
+    font-size: 2rem;
+    font-weight: 300;
+    white-space: nowrap;
+    padding: 0.2rem 0.5rem;
+    min-width: 2rem;
+    text-align: center;
+    color: #131a20;
+    border-radius: 0.5rem;
+    border: 0.1rem solid #51dcff;
+    background: #51dcff;
+    background-color: rgb(81, 220, 255);
+    background-image: none;
 }
 .calculator__range-container {
-  padding-top: 20px;
-  display: inline-block;
-  position: relative;
-  width: 100%;
+    padding-top: 4rem;
+    display: inline-block;
+    position: relative;
+    width: 100%;
 }
 .calculator__range-input {
-  width: 100%;
+    width: 100%;
 }

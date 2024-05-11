@@ -1,0 +1,60 @@
+{{ block "result" . }}
+<div class="result">
+    <div class="container">
+        <section class="result__ideal-man">
+            <h2 class="result__title">Мой идеальный мужчина</h2>
+            <div class="result__item">
+                <ul class="result__list result__list--params">
+
+                    {{ if .isMarried }}
+                        <li class="result__option">Любого семейного положения</li>
+                    {{ else }}
+                        <li class="result__option">Не женат</li>
+                    {{ end }} 
+
+                    {{ if .race == "any" }}
+                        <li class="result__option">Любой этнической группы</li>
+                    {{ else if .race == "exotic" }}
+                        <li class="result__option">
+                            Не славянин (черный, латино, европеец, американец, азиат)
+                        </li>
+                    {{ else if .race == "slavs" }}
+                        <li class="result__option">Славянин</li>
+                    {{ else if .race == "middle_asia" }}
+                        <li class="result__option">Житель средней азии</li>
+                    {{ else if .race == "other" }}
+                        <li class="result__option">Редкой этнической группы</li>
+                    {{ end }}
+                    
+                    {{ if .money == "any" }}
+                        <li class="result__option">Заработок не важен</li>
+                    {{ else }}
+                        <li class="result__option">Зарабатывает как минимум{{ .money }}</li>
+                    {{ end }}
+
+                    {{ if .height == "any" }}
+                        <li class="result__option">Рост не важен</li>
+                    {{ else }}
+                        <li class="result__option">Должен быть как минимум {{ .height }}см</li>
+                    {{ end }}
+                    
+                    {{ if .age == "any" }}
+                        <li class="result__option">Возраст не важен</li>
+                    {{ else }}
+                        <li class="result__option">Не младше {{ .age }}</li>
+                    {{ end }}
+
+                </ul>
+            </div>
+            <h2 class="result__title">Шанс</h2>
+            <div class="result__item">
+                <p class="result__text">Согласно <a href="/resources">cтатистическим данным</a> ваш шанс встретить вашего идеального мужчину составляет <span class="result__chance">{{ .chance}}%</span></p>
+            </div>
+            <h2 class="result__title">Шкала заблуждения</h2>
+            <div class="result__delusion">
+
+            </div>
+        </section>
+    </div>
+</div>
+{{ end }}

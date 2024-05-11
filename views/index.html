@@ -1,19 +1,23 @@
 {{ block "index" . }}
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 
-<head>
-    <title></title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/static/nullstyle.css" />
-    <link rel="stylesheet" href="/static/style.css" />
-    <script src="/static/js/range.js"></script>
-</head>
+    <head>
+        <title></title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://unpkg.com/htmx.org@1.9.12"
+        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+        crossorigin="anonymous"></script>
 
-<body>
-    {{ template "content" . }}
-</body>
+        <link rel="stylesheet" href="/static/nullstyle.css" />
+        <link rel="stylesheet" href="/static/style.css" />
+        <script src="/static/js/range.js"></script>
+    </head>
+
+    <body>
+        {{ template "content" . }}
+    </body>
 
 </html>
 {{ end }}

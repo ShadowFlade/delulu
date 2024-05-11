@@ -1,0 +1,37 @@
+{{ block "car" . }}
+<div class="calculator__item">
+    <h3 class="calculator__title">Наличие машины</h3>
+    <div class="calculator__input-group">
+        <label for="" class="calculator__label calculator__label">
+            <input
+                class="calculator__radio calculator__radio--race js-calculator__radio"
+                type="radio"
+                name="car"
+                value="yes"
+            />
+            <span class="calculator__fake-radio"></span>
+            <span class="calculator__radio-value">Есть машина</span>
+        </label>
+        <label for="" class="calculator__label calculator__label">
+            <input
+                class="calculator__radio calculator__radio--race js-calculator__radio"
+                type="radio"
+                name="car"
+                value="no"
+            />
+            <span class="calculator__fake-radio"></span>
+            <span class="calculator__radio-value">Нет машины</span>
+        </label>
+        <label for="" class="calculator__label calculator__label calculator__label--margin">
+            <input
+                class="calculator__radio calculator__radio--race js-calculator__radio"
+                type="radio"
+                name="car"
+                value="idc"
+            />
+            <span class="calculator__fake-radio"></span>
+            <span class="calculator__radio-value">Не важно</span>
+        </label>
+    </div>
+</div>
+{{ end }}

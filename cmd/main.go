@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"delulu/pkg/data"
+	"errors"
 	"html/template"
 	"io"
-	"path/filepath"
+	"math/rand"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -19,14 +21,9 @@ func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Co
 }
 
 func newTemplate() *Templates {
+	// TODO make recursive file inclusion - have it in bookmarks somewhere
 	return &Templates{
 		templates: template.Must(template.ParseGlob("views/*.html")),
-
-	//	templates: template.Must(template.ParseFiles( this works, but above does not 
-	//		"views/index.html",
-	//		"views/blocks/content.html",
-	//		"views/blocks/header.html",
-	//	)),
 	}
 }
 
@@ -40,7 +37,6 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 	page := newPage()
-    fmt.Println(filepath.Match("./views/**/*.html","./views/blocks/content.html"));
 	e.Renderer = newTemplate()
 
 	e.Static("/static", "static")
@@ -49,5 +45,93 @@ func main() {
 		return c.Render(200, "index", page)
 	})
 
+	e.POST("/result", func(c echo.Context) error {
+		age, ageOk := strconv.Atoi(c.FormValue("age"))
+		race := c.FormValue("race")
+		height, heightOk := strconv.Atoi(c.FormValue("height"))
+		money, moneyOk := strconv.Atoi(c.FormValue("money"))
+		isMarried, _ := strconv.ParseBool(c.FormValue("married"))
+
+		if moneyOk != nil || heightOk != nil || ageOk != nil {
+			return errors.New("Some value is missing")
+		}
+		var married float32
+		if isMarried {
+			married = float32(data.Stats.Married)
+		} else {
+			married = 1
+		}
+
+		chance := float32(
+			getValueFromRange(age)/data.Stats.Total,
+		) * data.Stats.Race[race] * float32(
+			married,
+		) * calcHeightPerc(float32(height))
+
+		var score int
+		var img string
+
+		if chance <= 1 {
+			score = 0
+			img = "0.jpg"
+		} else if chance <= 5 { // hold your horses lady
+			score = 1
+			img = "1.jpg"
+		} else if chance <= 15 { // are you a feminist?
+			score = 2
+			img = "2.jpg"
+		} else if chance <= 40 { // potential catlady
+			score = 3
+			imgs := []string{"3.jpg", "3_1.jpg"}
+			img = imgs[rand.Intn(len(imgs))]
+		} else if chance <= 65 { // down to earth
+			score = 4
+			img = "4.jpg"
+		} else if chance <= 95 { // tradwife material
+			score = 5
+			img = "5.jpg"
+		} else if chance > 95 { // probably not a woman
+			score = 6
+			img = "6.jpg"
+		}
+
+		formResults := map[string]interface{}{
+			"age":       age,
+			"race":      race,
+			"height":    height,
+			"money":     money,
+			"isMarried": isMarried,
+			"chance":    chance,
+			"score":     score,
+			"img":       img,
+		}
+
+		c.Render(200, "result", formResults)
+		return nil
+	})
+
 	e.Logger.Fatal(e.Start(":42069"))
+}
+
+func getValueFromRange(value int) int {
+	var result int
+	for ageRange, count := range data.Stats.Age {
+		min, minOk := strconv.Atoi(string(ageRange[0]))
+		max, maxOk := strconv.Atoi(string(ageRange[2]))
+		if minOk == nil && maxOk == nil && value >= min && value <= max {
+			result = count
+		}
+	}
+	return result
+}
+
+func calcHeightPerc(value float32) float32 {
+	var heightPerc float32
+	for _, height := range data.Stats.Height {
+		heightPerc += height
+		if height == value {
+			break
+		}
+	}
+	return heightPerc
 }

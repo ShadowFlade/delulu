@@ -1,0 +1,73 @@
+{{ block "calculator" . }}
+<form hx-post="/result" hx-swap="none"  class="calculator">
+    <div class="container">
+        <div class="calculator__items">
+            <div class="calculator__item">
+                <h3 class="calculator__title">Возраст</h3>
+                <div class="calculator__range">
+                    <div class="calculator__range-container">
+                        <input
+                            min="19"
+                            max="60"
+                            type="range"
+                            class="calculator__range-input js-calculator__range-input"
+                            name="age"
+                        />
+                        <span class="js-range-input__label range-input__label"></span>
+                    </div>
+                </div>
+                <input type="checkbox" class="calculator__checkbox" name="married">
+            </div>
+
+            {{ template "race" . }}
+
+            <div class="calculator__item">
+                <h3 class="calculator__title">Рост</h3>
+                <div class="calculator__input-group">
+                    <div class="calculator__range">
+                        <div class="calculator__range-container">
+                            <input
+                                min="150"
+                                max="220"
+                                type="range"
+                                class="calculator__range-input js-calculator__range-input"
+                                name="height"
+                            />
+
+                            <span class="js-range-input__label range-input__label"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="calculator__item">
+                <h3 class="calculator__title">Доход</h3>
+                <div class="calculator__input-group">
+                    <div class="calculator__range">
+                        <div class="calculator__range-container">
+                            <input
+                                min="0"
+                                max="1000000"
+                                step="1"
+                                type="range"
+                                data-type="money"
+                                class="calculator__range-input js-calculator__range-input"
+                                name="money"
+                            />
+
+                            <span class="js-range-input__label range-input__label"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {{ template "car" . }}
+
+        </div>
+    </div>
+    <button type="submit" hx-swap-oob="true" class="calculator__submit">
+        Получить результаты
+    </button>
+</form>
+{{ end }}

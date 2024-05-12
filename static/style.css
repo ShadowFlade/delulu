@@ -32,7 +32,7 @@ img {
 }
 
 .container {
-    padding-inline: 10rem;
+    padding-inline: 40rem;
 }
 
 .header__menu {
@@ -69,6 +69,7 @@ img {
     background-color: rgb(225, 91, 178);
     padding: 1.5rem;
     border-radius: 8px;
+    position:relative;
 }
 /* ----------------- RANGE SLIDER ---------------------- */
 .range-input__label {
@@ -147,4 +148,36 @@ img {
     display: flex;
     flex-direction: column;
     gap : 2rem;
+}
+.calculator__submit {
+    padding: 2rem 3rem;
+    width: 100%;
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+    background-color: rgb(254, 154, 224);
+    border-radius: 8px;
+}
+.calculator__fake-checkbox {
+    width:20px;
+    height:20px;
+    border:1px solid blue;
+    display:block;
+}
+.calculator__checkbox {
+    opacity:0;
+    z-index:2;
+    position:absolute;
+    width: 20px;
+    height: 20px;
+}
+
+.calculator__checkbox:checked + .calculator__fake-checkbox::before {
+   content: url("/static/img/check.svg"); 
+    position:absolute;
+    transform:translate(-50%,-50%);
+    top:50%;
+    left:50%;
+}
+.calculator__fake-container{
+    position: relative;
 }

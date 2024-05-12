@@ -3,6 +3,7 @@ package main
 import (
 	"delulu/pkg/data"
 	"errors"
+	"fmt"
 	"html/template"
 	"io"
 	"math/rand"
@@ -38,7 +39,6 @@ func main() {
 	e.Use(middleware.Logger())
 	page := newPage()
 	e.Renderer = newTemplate()
-
 	e.Static("/static", "static")
 
 	e.GET("/", func(c echo.Context) error {
@@ -95,7 +95,40 @@ func main() {
 			img = "6.jpg"
 		}
 
+		list := []string{}
+
+		if ageOk != nil {
+			list = append(list, "Любого возраста")
+		} else {
+			list = append(list, "Не младше "+fmt.Sprint(age))
+		}
+
+		if race == "any" {
+			list = append(list, "Любой этнической принадлежности")
+		} else {
+			list = append(list, race)
+		}
+
+		if heightOk != nil {
+			list = append(list, "Любого роста")
+		} else {
+			list = append(list, "Как минимум "+fmt.Sprint(height)+" см")
+		}
+
+		if moneyOk != nil {
+			list = append(list, "Любой заработок")
+		} else {
+			list = append(list, "Должен зарабатывать как минимум "+fmt.Sprint(money)+" т.р.")
+		}
+
+		if isMarried {
+			list = append(list, "Должен быть не женат")
+		} else {
+			list = append(list, "Семейное положение не важно")
+		}
+
 		formResults := map[string]interface{}{
+			"list":      list,
 			"age":       age,
 			"race":      race,
 			"height":    height,

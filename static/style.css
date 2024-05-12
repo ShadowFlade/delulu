@@ -15,10 +15,31 @@ body {
     display: flex;
     flex-direction:column;
     min-height: 100vh;
+    font-family: "Freeman", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 img {
     width: 100%;
+}
+/* --------------------- COMMON ----------------------- */
+.title {
+    color: #51DCFF;
+    font-size: 4rem;
+}
+.title--secondary {
+    font-size:2.5rem;
+}
+.calculator__title {
+    font-size: 2rem;
+}
+.calculator__title--result {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+.calculator__title--result:first-child{
+    margin-top:0;
 }
 /* --------------------- HEADER ----------------------- */
 .header {
@@ -144,10 +165,13 @@ img {
     height:10px;
 }
 .calculator__input-group {
-    margin-top: 3rem;
     display: flex;
     flex-direction: column;
     gap : 2rem;
+    margin-top: 3rem;
+}
+.calculator__input-group:has(.calculator__range)  {
+    margin-top:0;
 }
 .calculator__submit {
     padding: 2rem 3rem;
@@ -158,10 +182,11 @@ img {
     border-radius: 8px;
 }
 .calculator__fake-checkbox {
-    width:20px;
-    height:20px;
+    width:23px;
+    height:23px;
     border:1px solid blue;
     display:block;
+    position:relative;
 }
 .calculator__checkbox {
     opacity:0;
@@ -171,13 +196,29 @@ img {
     height: 20px;
 }
 
-.calculator__checkbox:checked + .calculator__fake-checkbox::before {
-   content: url("/static/img/check.svg"); 
+.calculator__fake-checkbox::before {
+    content: url("/static/img/check.svg"); 
     position:absolute;
     transform:translate(-50%,-50%);
     top:50%;
     left:50%;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    display:block;
+    scale: 0;
+    transition:.3s all ease-in;
 }
+
+.calculator__checkbox:checked + .calculator__fake-checkbox::before {
+    scale: 1;
+}
+
 .calculator__fake-container{
     position: relative;
+}
+.result__list {
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
 }

@@ -1,5 +1,5 @@
 {{ block "calculator" . }}
-<form hx-post="/result" hx-swap="none" class="calculator">
+<form action="/result"  class="calculator">
     <div class="container">
         <div class="calculator__items">
             <div class="calculator__item">
@@ -48,7 +48,7 @@
 
             {{ template "car" . }}
         </div>
-        <button type="submit" hx-swap-oob="true" class="calculator__submit">
+        <button type="submit"  class="calculator__submit">
             Получить результаты
         </button>
     </div>

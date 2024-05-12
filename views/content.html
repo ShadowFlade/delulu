@@ -1,5 +1,8 @@
-{{ block "content" . }} {{ template "header" . }}
+{{ block "content" . }} 
 
+{{ template "header" . }}
+
+{{ if (eq .Page "index") }}
 <div class="container">
     <div class="top-block">
         <h1 class="title">Калькулятор женского заблуждения</h1>
@@ -12,5 +15,11 @@
     </div>
 </div>
 
+{{ else if (eq .Page "result") }}
+    {{template "result" .}}
+{{ end }}
+
+{{ if (eq .Page "index") }}
 {{ template "calculator" . }}
+{{ end }}
 {{ end }}

@@ -2,23 +2,23 @@
 <div class="result">
     <div class="container">
         <section class="result__ideal-man">
-            <h2 class="result__title">Мой идеальный мужчина</h2>
-            <div class="result__item">
+            <h2 class="calculator__title calculator__title--result">Мой идеальный мужчина</h2>
+            <div class="calculator__item">
                 <ul class="result__list result__list--params">
-                    {{ range $key, $val :=.list }}
+                    {{ range $_, $val := .List }}
                         <li class="result__option">{{$val}}</li>
                     {{end}}
                 </ul>
             </div>
-            <h2 class="result__title">Шанс</h2>
-            <div class="result__item">
+            <h2 class="calculator__title calculator__title--result">Шанс</h2>
+            <div class="calculator__item">
                 <p class="result__text">
                     Согласно <a href="/resources">cтатистическим данным</a> ваш шанс
                     встретить вашего идеального мужчину составляет
-                    <span class="result__chance">{{ .chance}}%</span>
+                    <span class="result__chance">{{ .Chance}}%</span>
                 </p>
             </div>
-            <h2 class="result__title">Шкала заблуждения</h2>
+            <h2 class="calculator__title calculator__title--result">Шкала заблуждения</h2>
             <div class="result__delusion"></div>
         </section>
     </div>

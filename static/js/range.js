@@ -8,18 +8,21 @@ function calcTooltipTranslate(rangeEl, rangeLabelEl) {
 
     translate =
         ((+(+rangeEl.value) - +rangeEl.min) / valueDiff) *
-        (parseFloat(rangeEl.offsetWidth) -
-            parseFloat(rangeLabelEl.offsetWidth) / 2) -
-        15;
+            (parseFloat(rangeEl.offsetWidth) -
+                parseFloat(rangeLabelEl.offsetWidth) / 2) -
+            15;
 
     //this is kinda terrible tbh
     const resultString = `translateX(${translate}px)`;
 
     if (rangeEl.dataset.type == "money") {
-        const newValue = formatValueToMoney(rangeEl.value, +rangeEl.max);
+        const newValue = formatValueToMoney(rangeEl.value, +rangeEl.max +rangeEl.min);
         console.log(newValue, " new value");
         rangeLabelEl.textContent = newValue;
-    } else {
+    } else if (rangeEl.dataset.type == "height") {
+                    
+   }
+     else {
         rangeLabelEl.textContent = rangeEl.value;
     }
     rangeLabelEl.style.transform = resultString;
@@ -54,8 +57,12 @@ function formatValueToMoney(value, max) {
     });
 
     let newValue = formatter.format(money);
+
     if (value == max) {
         newValue = '>' + newValue;
+    } else if (value == min){
+        newValue = "any"
     }
+
     return newValue;
 }

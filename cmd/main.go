@@ -61,7 +61,7 @@ func main() {
     e.Static("/static", "static")
 
     e.GET("/", func(c echo.Context) error {
-        return c.Render(200, "index", struct{ Page string }{Page: "index"})
+        return c.Render(200, "index", struct{ Page string; Header string }{Page: "index", Header: "header"})
     })
 
     e.GET("/result", func(c echo.Context) error {

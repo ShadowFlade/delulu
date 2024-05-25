@@ -22,3 +22,4 @@ go.work
 stats.md
 tmp/main
 tmp/build-errors.log
+tmp/**/*

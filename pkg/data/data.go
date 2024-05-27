@@ -394,3 +394,32 @@ func (s *IStats) calcAvgSalaryPerAge(age int) float32 {
 	newSalary := salary / float32(count)
 	return newSalary
 }
+
+// func (s IStats) calcSalaryChance(ageRange string) (float32, error) {
+// 	ageSplit := strings.Split(ageRange, "-")
+// 	minAge, minAgeErr := strconv.Atoi(ageSplit[2])
+// 	maxAge, maxAgeErr := strconv.Atoi(ageSplit[0])
+
+// 	if minAgeErr != nil || maxAgeErr != nil {
+// 		return 0.00, errors.New("No max or min age")
+// 	}
+
+// 	var ages []int
+// 	var salaryMap map[int]float32
+
+// 	for i := minAge; i <= maxAge-minAge; i++ {
+// 		age, ageErr := strconv.Atoi(strings.Trim(string(i), " "))
+
+// 		if ageErr != nil {
+// 			return 0.00, errors.New("Age not convertable")
+// 		}
+
+// 		ages = append(ages, age)
+// 		avgSalary := s.calcAvgSalaryPerAge(age)
+// 		salaryMap[age] = avgSalary
+// 	}
+
+// 	var chance float32
+
+// 	return ages, nil
+// }

@@ -14,14 +14,12 @@ function calcTooltipTranslate(rangeEl, rangeLabelEl) {
 
     //this is kinda terrible tbh
     const resultString = `translateX(${translate}px)`;
-
+    console.log(rangeEl,' range el');
     if (rangeEl.dataset.type == "money") {
-        const newValue = formatValueToMoney(rangeEl.value, +rangeEl.max +rangeEl.min);
+        const newValue = formatValueToMoney(rangeEl.value, +rangeEl.max, +rangeEl.min);
         console.log(newValue, " new value");
         rangeLabelEl.textContent = newValue;
-    } else if (rangeEl.dataset.type == "height") {
-                    
-   }
+    }
      else {
         rangeLabelEl.textContent = rangeEl.value;
     }
@@ -46,7 +44,7 @@ function initSliders() {
     });
 }
 
-function formatValueToMoney(value, max) {
+function formatValueToMoney(value, max, min) {
     const money = value;
     const formatter = new Intl.NumberFormat("ru-ru", {
         notation: "compact",
@@ -61,7 +59,7 @@ function formatValueToMoney(value, max) {
     if (value == max) {
         newValue = '>' + newValue;
     } else if (value == min){
-        newValue = "any"
+        newValue = "Любой"
     }
 
     return newValue;

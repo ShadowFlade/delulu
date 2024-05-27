@@ -38,7 +38,7 @@ var Stats = IStats{
 	Married: 63,
 	Race: map[string]float32{
 		"slavs":        91.00,
-		"middle_asian": 2.00,
+		"Middle_asian": 2.00,
 		"exotic":       0.0000034,
 		"other":        6.00,
 	},
@@ -80,300 +80,317 @@ var Stats = IStats{
 		199.00: 0.00,
 		200.00: 0.00,
 	},
-	Salary: {
-		"автомобильный бизнес": ISpeISphereDescription{
+	Salary: ISphere{
+		"автомобильный бизнес": ISphereDescription{
 			Salary: ISphereRange{
 				Start: 46,
 				Mid:   92,
 				End:   66,
 			},
-			Age: ISpereRange{
+			Age: ISphereRange{
 				Start: 20,
 				Mid:   42,
 				End:   53,
 			},
 		},
 		"административный персонал": {
-			"salary": {
-				"start": 35,
-				"mid":   62,
-				"end":   43,
+			Salary: ISphereRange{
+				Start: 35,
+				Mid:   62,
+				End:   43,
 			},
-			"age": {
-				"start": 18,
-				"mid":   36,
-				"end":   64,
+			Age: ISphereRange{
+				Start: 18,
+				Mid:   36,
+				End:   64,
 			},
 		},
 		"банки": {
-			"salary": {
-				"start": 47,
-				"mid":   109,
-				"end":   63,
+			Salary: ISphereRange{
+				Start: 47,
+				Mid:   109,
+				End:   63,
 			},
-			"age": {
-				"start": 19,
-				"mid":   35,
-				"end":   64,
+			Age: ISphereRange{
+				Start: 19,
+				Mid:   35,
+				End:   64,
 			},
 		},
 		"безопасность": {
-			"salary": {
-				"start": 47,
-				"mid":   79,
-				"end":   61,
+			Salary: ISphereRange{
+				Start: 47,
+				Mid:   79,
+				End:   61,
 			},
-			"age": {
-				"start": 21,
-				"mid":   41,
-				"end":   59,
+			Age: ISphereRange{
+				Start: 21,
+				Mid:   41,
+				End:   59,
 			},
 		},
 		"бухгалтерия": {
-			"salary": {
-				"start": 39,
-				"mid":   96,
-				"end":   69,
+			Salary: ISphereRange{
+				Start: 39,
+				Mid:   96,
+				End:   69,
 			},
-			"age": {
-				"start": 19,
-				"mid":   43,
-				"end":   61,
+			Age: ISphereRange{
+				Start: 19,
+				Mid:   43,
+				End:   61,
 			},
 		},
 		"высший менеджмент": {
-			"salary": {
-				"start": 57,
-				"mid":   198,
-				"end":   164,
+			Salary: ISphereRange{
+				Start: 57,
+				Mid:   198,
+				End:   164,
 			},
-			"age": {
-				"start": 21,
-				"mid":   45,
-				"end":   59,
+			Age: ISphereRange{
+				Start: 21,
+				Mid:   45,
+				End:   59,
 			},
 		},
 		"гос служба и НКО": {
-			"salary": {
-				"start": 46,
-				"mid":   82,
-				"end":   66,
+			Salary: ISphereRange{
+				Start: 46,
+				Mid:   82,
+				End:   66,
 			},
-			"age": {
-				"start": 22,
-				"mid":   40,
-				"end":   50,
+			Age: ISphereRange{
+				Start: 22,
+				Mid:   40,
+				End:   50,
 			},
 		},
 		"домашний персонал": {
-			"salary": {
-				"start": 68,
-				"mid":   63,
-				"end":   58,
+			Salary: ISphereRange{
+				Start: 68,
+				Mid:   63,
+				End:   58,
 			},
-			"age": {
-				"start": 30,
-				"mid":   44,
-				"end":   59,
+			Age: ISphereRange{
+				Start: 30,
+				Mid:   44,
+				End:   59,
 			},
 		},
 		"закупки": {
-			"salary": {
-				"start": 63,
-				"mid":   102,
-				"end":   81,
+			Salary: ISphereRange{
+				Start: 63,
+				Mid:   102,
+				End:   81,
 			},
-			"age": {
-				"start": 23,
-				"mid":   41,
-				"end":   50,
+			Age: ISphereRange{
+				Start: 23,
+				Mid:   41,
+				End:   50,
 			},
 		},
 		"информационные технологии": {
-			"salary": {
-				"start": 43,
-				"mid":   146,
-				"end":   93,
+			Salary: ISphereRange{
+				Start: 43,
+				Mid:   146,
+				End:   93,
 			},
-			"age": {
-				"start": 18,
-				"mid":   43,
-				"end":   59,
+			Age: ISphereRange{
+				Start: 18,
+				Mid:   43,
+				End:   59,
 			},
 		},
 		"искусство и медиа": {
-			"salary": {
-				"start": 36,
-				"mid":   72,
-				"end":   63,
+			Salary: ISphereRange{
+				Start: 36,
+				Mid:   72,
+				End:   63,
 			},
-			"age": {
-				"start": 18,
-				"mid":   41,
-				"end":   55,
+			Age: ISphereRange{
+				Start: 18,
+				Mid:   41,
+				End:   55,
 			},
 		},
 		"маркетинг и реклама": {
-			"salary": {
-				"start": 34,
-				"mid":   108,
-				"end":   88,
+			Salary: ISphereRange{
+				Start: 34,
+				Mid:   108,
+				End:   88,
 			},
-			"age": {
-				"start": 18,
-				"mid":   41,
-				"end":   51,
+			Age: ISphereRange{
+				Start: 18,
+				Mid:   41,
+				End:   51,
 			},
 		},
 		"медицина и фармацевтика": {
-			"salary": {
-				"start": 43,
-				"mid":   87,
-				"end":   74,
+			Salary: ISphereRange{
+				Start: 43,
+				Mid:   87,
+				End:   74,
 			},
-			"age": {
-				"start": 20,
-				"mid":   35,
-				"end":   59,
+			Age: ISphereRange{
+				Start: 20,
+				Mid:   35,
+				End:   59,
 			},
 		},
 		"продажи": {
-			"salary": {
-				"start": 30,
-				"mid":   81,
-				"end":   59,
+			Salary: ISphereRange{
+				Start: 30,
+				Mid:   81,
+				End:   59,
 			},
-			"age": {
-				"start": 17,
-				"mid":   38,
-				"end":   61,
+			Age: ISphereRange{
+				Start: 17,
+				Mid:   38,
+				End:   61,
 			},
 		},
 		"производство и сельское хозяйство": {
-			"salary": {
-				"start": 44,
-				"mid":   93,
-				"end":   87,
+			Salary: ISphereRange{
+				Start: 44,
+				Mid:   93,
+				End:   87,
 			},
-			"age": {
-				"start": 20,
-				"mid":   41,
-				"end":   64,
+			Age: ISphereRange{
+				Start: 20,
+				Mid:   41,
+				End:   64,
 			},
 		},
 		"рабочий персонал": {
-			"salary": {
-				"start": 38,
-				"mid":   53,
-				"end":   38,
+			Salary: ISphereRange{
+				Start: 38,
+				Mid:   53,
+				End:   38,
 			},
-			"age": {
-				"start": 19,
-				"mid":   36,
-				"end":   61,
+			Age: ISphereRange{
+				Start: 19,
+				Mid:   36,
+				End:   61,
 			},
 		},
 		"транспорт,логистика": {
-			"salary": {
-				"start": 40,
-				"mid":   67,
-				"end":   53,
+			Salary: ISphereRange{
+				Start: 40,
+				Mid:   67,
+				End:   53,
 			},
-			"age": {
-				"start": 19,
-				"mid":   40,
-				"end":   62,
+			Age: ISphereRange{
+				Start: 19,
+				Mid:   40,
+				End:   62,
 			},
 		},
 		"туризм": {
-			"salary": {
-				"start": 40,
-				"mid":   69,
-				"end":   56,
+			Salary: ISphereRange{
+				Start: 40,
+				Mid:   69,
+				End:   56,
 			},
-			"age": {
-				"start": 18,
-				"mid":   38,
-				"end":   55,
+			Age: ISphereRange{
+				Start: 18,
+				Mid:   38,
+				End:   55,
 			},
 		},
 		"тренинги и управление персоналом": {
-			"salary": {
-				"start": 43,
-				"mid":   91,
-				"end":   76,
+			Salary: ISphereRange{
+				Start: 43,
+				Mid:   91,
+				End:   76,
 			},
-			"age": {
-				"start": 20,
-				"mid":   42,
-				"end":   55,
+			Age: ISphereRange{
+				Start: 20,
+				Mid:   42,
+				End:   55,
 			},
 		},
 		"фитнес и красота": {
-			"salary": {
-				"start": 41,
-				"mid":   72,
-				"end":   64,
+			Salary: ISphereRange{
+				Start: 41,
+				Mid:   72,
+				End:   64,
 			},
-			"age": {
-				"start": 18,
-				"mid":   41,
-				"end":   52,
+			Age: ISphereRange{
+				Start: 18,
+				Mid:   41,
+				End:   52,
 			},
 		},
 		"юристы": {
-			"salary": {
-				"start": 46,
-				"mid":   119,
-				"end":   102,
+			Salary: ISphereRange{
+				Start: 46,
+				Mid:   119,
+				End:   102,
 			},
-			"age": {
-				"start": 21,
-				"mid":   38,
-				"end":   52,
+			Age: ISphereRange{
+				Start: 21,
+				Mid:   38,
+				End:   52,
 			},
 		},
 		"консультирование": {
-			"salary": {
-				"start": 51,
-				"mid":   133,
-				"end":   142,
+			Salary: ISphereRange{
+				Start: 51,
+				Mid:   133,
+				End:   142,
 			},
-			"age": {
-				"start": 21,
-				"mid":   34,
-				"end":   41,
+			Age: ISphereRange{
+				Start: 21,
+				Mid:   34,
+				End:   41,
 			},
 		},
 		"наука и образование": {
-			"salary": {
-				"start": 35,
-				"mid":   67,
-				"end":   65,
+			Salary: ISphereRange{
+				Start: 35,
+				Mid:   67,
+				End:   65,
 			},
-			"age": {
-				"start": 19,
-				"mid":   49,
-				"end":   59,
+			Age: ISphereRange{
+				Start: 19,
+				Mid:   49,
+				End:   59,
 			},
 		},
 		"страхование": {
-			"salary": {
-				"start": 58,
-				"mid":   70,
-				"end":   76,
+			Salary: ISphereRange{
+				Start: 58,
+				Mid:   70,
+				End:   76,
 			},
-			"age": {
-				"start": 23,
-				"mid":   34,
-				"end":   48,
+			Age: ISphereRange{
+				Start: 23,
+				Mid:   34,
+				End:   48,
 			},
 		},
 	},
 }
 
-func (s *IStats) calcAvgSalaryPerAge(age int) {
-	// for sphere, v := range s.Salary {
-	// 	isDecl :=
-	// }
+func (s *IStats) calcAvgSalaryPerAge(age int) float32 {
+	var salary float32
+	var count int
+	for _, v := range s.Salary {
+		isSalaryChanging := (v.Salary.Mid - v.Salary.End) > 0
+		isShouldSalaryRise := age > v.Age.Start && age <= v.Age.Mid
+		var step float32
+
+		if isSalaryChanging && isShouldSalaryRise {
+			step = (float32(v.Salary.Mid - v.Salary.Start)) / (float32(v.Age.Mid - v.Age.Start))
+			salary = float32(v.Salary.Start) + step*float32((age-v.Age.Start))
+		} else if isSalaryChanging && !isShouldSalaryRise {
+			step = (float32(v.Salary.Mid - v.Salary.End)) / (float32(v.Age.End - v.Age.Mid))
+			salary = float32(v.Salary.Mid) - step*float32((age-v.Age.Mid))
+		} else if !isSalaryChanging {
+			salary += float32(v.Salary.End) //берем любое значение
+		}
+		count += 1
+	}
+	newSalary := salary / float32(count)
+	return newSalary
 }

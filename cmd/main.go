@@ -74,20 +74,12 @@ func main() {
 		height, heightOk := strconv.Atoi(c.QueryParam("height"))
 		money, moneyOk := strconv.Atoi(c.QueryParam("money"))
 		isMarried, _ := strconv.ParseBool(c.QueryParam("married"))
-		// salary := c.QueryParam("salary")
 
 		if moneyOk != nil || heightOk != nil || ageOk != nil {
 			return errors.New("Some value is missing")
 		}
-		var married float32
 
-		if isMarried {
-			married = float32(data.Stats.Married)
-		} else {
-			married = 1
-		}
-
-		chance := float32(getValueFromRange(age)/data.Stats.Total) * data.Stats.Race[race] * float32(married) * calcHeightPerc(float32(height))
+		chance := data.Stats.CalcChance(age, race, height, money, isMarried)
 
 		var score int
 		var img string
@@ -164,27 +156,4 @@ func main() {
 	})
 
 	e.Logger.Fatal(e.Start(":42069"))
-}
-
-func getValueFromRange(value int) int {
-	var result int
-	for ageRange, count := range data.Stats.Age {
-		min, minOk := strconv.Atoi(string(ageRange[0]))
-		max, maxOk := strconv.Atoi(string(ageRange[2]))
-		if minOk == nil && maxOk == nil && value >= min && value <= max {
-			result = count
-		}
-	}
-	return result
-}
-
-func calcHeightPerc(value float32) float32 {
-	var heightPerc float32
-	for _, height := range data.Stats.Height {
-		heightPerc += height
-		if height == value {
-			break
-		}
-	}
-	return heightPerc
 }

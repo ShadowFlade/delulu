@@ -1,6 +1,13 @@
 package data
 
+import (
+	"errors"
+	"strconv"
+	"strings"
+)
+
 type AgeMap map[string]int
+type HeightMap map[float32]float32
 
 type IStats struct {
 	Total   int
@@ -45,7 +52,7 @@ var Stats = IStats{
 		"exotic":       0.0000034,
 		"other":        6.00,
 	},
-	Height: map[float32]float32{
+	Height: HeightMap{
 		165.00: 0.15,
 		166.00: 0.67,
 		167.00: 1.18,
@@ -398,31 +405,82 @@ func (s *IStats) calcAvgSalaryPerAge(age int) float32 {
 	return newSalary
 }
 
-// func (s IStats) calcSalaryChance(ageRange string) (float32, error) {
-// 	ageSplit := strings.Split(ageRange, "-")
-// 	minAge, minAgeErr := strconv.Atoi(ageSplit[2])
-// 	maxAge, maxAgeErr := strconv.Atoi(ageSplit[0])
+func (s *IStats) CalcChance(age int, race string, height int, money int, excludeMarried bool) float32 {
+	var marriedChance float32
+	if excludeMarried {
+		marriedChance = .37
+	} else {
+		marriedChance = .63
+	}
 
-// 	if minAgeErr != nil || maxAgeErr != nil {
-// 		return 0.00, errors.New("No max or min age")
-// 	}
+	heightChance := s.calcHeightChance(float32(height))
+	ageChance := float32(s.calcAgeChange(float32(age))) / float32(s.Total)
+	// salaryChance := s.calcSalaryChance(money)
+	if excludeMarried {
+		marriedChance = 1 - float32(s.Married)
+	} else {
+		marriedChance = 1
+	}
+	chance := heightChance * ageChance * marriedChance
+	return chance
 
-// 	var ages []int
-// 	var salaryMap map[int]float32
+}
 
-// 	for i := minAge; i <= maxAge-minAge; i++ {
-// 		age, ageErr := strconv.Atoi(strings.Trim(string(i), " "))
-
-// 		if ageErr != nil {
-// 			return 0.00, errors.New("Age not convertable")
-// 		}
-
-// 		ages = append(ages, age)
-// 		avgSalary := s.calcAvgSalaryPerAge(age)
-// 		salaryMap[age] = avgSalary
-// 	}
-
-// 	var chance float32
-
-// 	return ages, nil
+// func (s *IStats) calcSalaryChance(money int) float32 {
+// 	s.calcAgeChange()
 // }
+
+func (s *IStats) calcAgeChange(value float32) int {
+	var result int
+	for ageRange, count := range s.Age {
+		min, minOk := strconv.Atoi(string(ageRange[0]))
+		max, maxOk := strconv.Atoi(string(ageRange[2]))
+		if minOk == nil && maxOk == nil && value >= float32(min) && value <= float32(max) {
+			result = count
+		}
+	}
+	return result
+}
+
+func (s *IStats) calcHeightChance(value float32) float32 {
+	var heightPerc float32
+	for _, height := range s.Height {
+		heightPerc += height
+		if height == value {
+			break
+		}
+	}
+	return heightPerc
+}
+
+func (s *IStats) calcSalaryChance() (float32, error) {
+	for _, stats := range s.Age {
+
+	}
+
+	minAge, minAgeErr := strconv.Atoi(ageSplit[2])
+	maxAge, maxAgeErr := strconv.Atoi(ageSplit[0])
+
+	if minAgeErr != nil || maxAgeErr != nil {
+		return 0.00, errors.New("No max or min age")
+	}
+
+	var ages []int
+	var salaryMap map[int]float32
+
+	for i := minAge; i <= maxAge-minAge; i++ {
+		age, ageErr := strconv.Atoi(strings.Trim(string(i), " "))
+
+		if ageErr != nil {
+			return 0.00, errors.New("Age not convertable")
+		}
+
+		ages = append(ages, age)
+		avgSalary := s.calcAvgSalaryPerAge(age)
+		salaryMap[age] = avgSalary
+	}
+
+	var chance float32
+
+	return ages, nil
+}

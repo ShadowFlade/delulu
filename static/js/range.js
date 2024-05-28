@@ -14,10 +14,8 @@ function calcTooltipTranslate(rangeEl, rangeLabelEl) {
 
     //this is kinda terrible tbh
     const resultString = `translateX(${translate}px)`;
-    console.log(rangeEl,' range el');
     if (rangeEl.dataset.type == "money") {
         const newValue = formatValueToMoney(rangeEl.value, +rangeEl.max, +rangeEl.min);
-        console.log(newValue, " new value");
         rangeLabelEl.textContent = newValue;
     }
      else {

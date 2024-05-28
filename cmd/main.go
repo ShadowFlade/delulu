@@ -59,8 +59,7 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Renderer = newTemplate()
-	e.Static("/static", "/static")
-	e.Static("/img", "/static/img")
+	e.Static("/static", "static")
 
 	e.GET("/", func(c echo.Context) error {
 		return c.Render(200, "index", struct {

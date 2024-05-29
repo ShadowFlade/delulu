@@ -1,0 +1,17 @@
+.tooltip {
+    position: absolute;
+    min-width: 20px !important;
+    width: fit-content !important;
+    font-size: 2rem !important;
+    font-weight: 300 !important;
+    white-space: nowrap !important;
+    padding: 0.2rem 0.5rem !important;
+    min-width: 2rem !important;
+    text-align: center !important;
+    color: #131a20 !important;
+    border-radius: 0.5rem !important;
+    border: 0.1rem solid #51dcff !important;
+    background: #51dcff !important;
+    background-color: rgb(81, 220, 255) !important;
+    background-image: none !important;
+}

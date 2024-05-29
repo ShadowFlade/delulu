@@ -1,9 +1,7 @@
 package data
 
 import (
-	"errors"
 	"strconv"
-	"strings"
 )
 
 type AgeMap map[string]int
@@ -453,34 +451,34 @@ func (s *IStats) calcHeightChance(value float32) float32 {
 	return heightPerc
 }
 
-func (s *IStats) calcSalaryChance() (float32, error) {
-	for _, stats := range s.Age {
+// func (s *IStats) calcSalaryChance() (float32, error) {
+// 	for _, stats := range s.Age {
 
-	}
+// 	}
 
-	minAge, minAgeErr := strconv.Atoi(ageSplit[2])
-	maxAge, maxAgeErr := strconv.Atoi(ageSplit[0])
+// 	minAge, minAgeErr := strconv.Atoi(ageSplit[2])
+// 	maxAge, maxAgeErr := strconv.Atoi(ageSplit[0])
 
-	if minAgeErr != nil || maxAgeErr != nil {
-		return 0.00, errors.New("No max or min age")
-	}
+// 	if minAgeErr != nil || maxAgeErr != nil {
+// 		return 0.00, errors.New("No max or min age")
+// 	}
 
-	var ages []int
-	var salaryMap map[int]float32
+// 	var ages []int
+// 	var salaryMap map[int]float32
 
-	for i := minAge; i <= maxAge-minAge; i++ {
-		age, ageErr := strconv.Atoi(strings.Trim(string(i), " "))
+// 	for i := minAge; i <= maxAge-minAge; i++ {
+// 		age, ageErr := strconv.Atoi(strings.Trim(string(i), " "))
 
-		if ageErr != nil {
-			return 0.00, errors.New("Age not convertable")
-		}
+// 		if ageErr != nil {
+// 			return 0.00, errors.New("Age not convertable")
+// 		}
 
-		ages = append(ages, age)
-		avgSalary := s.calcAvgSalaryPerAge(age)
-		salaryMap[age] = avgSalary
-	}
+// 		ages = append(ages, age)
+// 		avgSalary := s.calcAvgSalaryPerAge(age)
+// 		salaryMap[age] = avgSalary
+// 	}
 
-	var chance float32
+// 	var chance float32
 
-	return ages, nil
-}
+// 	return ages, nil
+// }

@@ -24,6 +24,15 @@ img {
     width: 100%;
 }
 
+.main-image {
+    width: 550px;
+}
+
+.main-image__wrapper {
+    display: flex;
+    justify-content: center;
+}
+
 /* --------------------- COMMON ----------------------- */
 .title {
     color: #51DCFF;
@@ -239,7 +248,8 @@ img {
     position: relative;
     display: flex;
     gap: 1rem;
-    align-items: center
+    align-items: center;
+    margin-top:2rem;
 }
 
 .result__list {
@@ -247,4 +257,3 @@ img {
     flex-direction: column;
     gap: 1.5rem;
 }
-

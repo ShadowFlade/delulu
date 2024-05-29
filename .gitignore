@@ -23,3 +23,4 @@ stats.md
 tmp/main
 tmp/build-errors.log
 tmp/**/*
+node_modules/

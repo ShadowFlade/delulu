@@ -98,62 +98,61 @@ func main() {
 
 		if chance <= 1 {
 			score = 0
-			img = "0.jpg"
+			img = "1.png"
 		} else if chance <= 5 { // hold your horses lady
 			score = 1
-			img = "1.jpg"
+			img = "2.jpg"
 		} else if chance <= 15 { // are you a feminist?
 			score = 2
-			img = "2.jpg"
-		} else if chance <= 40 { // potential catlady
-			score = 3
 			imgs := []string{"3.jpg", "3_1.jpg"}
 			img = imgs[rand.Intn(len(imgs))]
+		} else if chance <= 40 { // potential catlady
+			score = 3
+			img = "4.jpg"
+
 		} else if chance <= 65 { // down to earth
 			score = 4
-			img = "4.jpg"
+			img = "5.jpg"
 		} else if chance <= 95 { // tradwife material
 			score = 5
-			img = "5.jpg"
+			img = "6.jpg"
+
 		} else if chance > 95 { // probably not a woman
 			score = 6
-			img = "6.jpg"
 		}
 
 		list := make([]template.HTML, 0)
-		fmt.Println(minAge, " min age")
 		if minAgeErr == nil || maxAgeErr == nil {
-			list = append(list, template.HTML("Между <span>"+fmt.Sprint(minAge)+"</span> и <span>"+fmt.Sprint(maxAge)))
-		} else { // akshually u can write it in html/template but me stupid amd now im too lazy to do it
+			list = append(list, template.HTML("Между <span class='answer'>"+fmt.Sprint(minAge)+"</span> и <span class='answer'>"+fmt.Sprint(maxAge)))
+		} else {
 			list = append(list, "Любого возраста")
 		}
 
 		if race == "any" {
 			list = append(list, "Любой этнической принадлежности")
 		} else {
-			list = append(list, template.HTML(raceMap[race]))
+			list = append(list, template.HTML("<span class='answer'>"+fmt.Sprint(raceMap[race])+"</span>"))
 		}
 
 		if heightOk == nil {
-			list = append(list, template.HTML("Как минимум <span>"+fmt.Sprint(height)+"</span> см"))
+			list = append(list, template.HTML("Как минимум <span class='answer'>"+fmt.Sprint(height)+"см</span> "))
 		} else {
 			list = append(list, "Любого роста")
 		}
 
 		if moneyOk == nil {
-			list = append(list, template.HTML("Должен зарабатывать как минимум <span>"+fmt.Sprint(money/1000)+"</span> т.р."))
+			list = append(list, template.HTML("Должен зарабатывать как минимум <span class='answer'>"+fmt.Sprint(money/1000)+"т.р.</span> "))
 		} else {
 			list = append(list, template.HTML("Любой заработок"))
 		}
 
 		if isMarried {
-			list = append(list, "Должен быть не женат")
+			list = append(list, "Должен быть <span class='answer'>не женат</span>")
 		} else {
-			list = append(list, "Семейное положение не важно")
+			list = append(list, "Семейное положение <span class='answer'>не важно</span>")
 		}
 
 		race = raceMap[race]
-		fmt.Println(race, " race")
 
 		formResults := FormResults{
 			List:      list,

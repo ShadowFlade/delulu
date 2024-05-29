@@ -421,6 +421,7 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 	} else {
 		marriedChance = 1
 	}
+	// fmt.Println(heightChance, ageChance, marriedChance, salaryChance)
 	chance := heightChance * ageChance * marriedChance * salaryChance
 	return chance
 }
@@ -431,7 +432,6 @@ func (s *IStats) calcSalaryChance(money int) float32 {
 	var pplWithDesiredMoney float32
 	for age, ppl := range s.Age {
 		ageRange := strings.Split(age, " - ")
-		fmt.Println(ageRange)
 		ageMin, _ := strconv.Atoi(ageRange[0])
 		ageMax, _ := strconv.Atoi(ageRange[1])
 		pplPerAge := float32(ppl) / float32(ageMax-ageMin+1)
@@ -445,6 +445,7 @@ func (s *IStats) calcSalaryChance(money int) float32 {
 		}
 	}
 	chance := pplWithDesiredMoney / float32(totalPeople)
+	fmt.Println(pplWithDesiredMoney, totalPeople)
 	return chance
 }
 

@@ -253,11 +253,19 @@ img {
     display: flex;
     gap: 1rem;
     align-items: center;
-    margin-top:2rem;
+    margin-top: 2rem;
 }
 
 .result__list {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+}
+
+.result__text {
+    line-height: 1.7
+}
+
+.answer {
+    color: #51dcff;
 }

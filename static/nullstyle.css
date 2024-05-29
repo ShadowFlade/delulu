@@ -77,7 +77,6 @@ h6 {
 
 a,
 a:visited,
-a:-webkit-any-link,
 :any-link {
   text-decoration: none;
   border: 0;

@@ -68,7 +68,9 @@ img {
 }
 
 .container {
-    padding-inline: 40rem;
+    max-width: 800px;
+    margin-inline: auto;
+    padding-inline: 30px;
 }
 
 .header__menu {
@@ -264,6 +266,23 @@ img {
 
 .result__text {
     line-height: 1.7
+}
+
+.result__delusion {
+    padding: 2rem;
+    background: rgb(225, 91, 178);
+    border-radius: 16px;
+}
+
+.result__delusion img {
+    border-radius: 8px;
+}
+
+.result__new {
+    margin-top: 2rem;
+    display: block;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .answer {

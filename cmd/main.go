@@ -71,15 +71,22 @@ func main() {
 	e.GET("/result", func(c echo.Context) error {
 		minAge, minAgeErr := strconv.Atoi(c.QueryParam("age-min"))
 		maxAge, maxAgeErr := strconv.Atoi(c.QueryParam("age-max"))
-
-		age, ageOk := strconv.Atoi(c.QueryParam("age"))
 		race := c.QueryParam("race")
 		height, heightOk := strconv.Atoi(c.QueryParam("height"))
 		money, moneyOk := strconv.Atoi(c.QueryParam("money"))
 		isMarried, _ := strconv.ParseBool(c.QueryParam("married"))
 
-		if moneyOk != nil || heightOk != nil || ageOk != nil || minAgeErr != nil || maxAgeErr != nil {
-			return errors.New("Some value is missing")
+		if moneyOk != nil {
+			return errors.New("Money is missing")
+		}
+		if heightOk != nil {
+			return errors.New("heightOk is missing")
+		}
+		if minAgeErr != nil {
+			return errors.New("minAgeErr is missing")
+		}
+		if maxAgeErr != nil {
+			return errors.New("maxAgeErr is missing")
 		}
 
 		chance := data.Stats.CalcChance(minAge, maxAge, race, height, money, isMarried)
@@ -113,8 +120,8 @@ func main() {
 
 		list := make([]string, 0)
 
-		if ageOk == nil {
-			list = append(list, "Не младше "+fmt.Sprint(age))
+		if minAgeErr == nil || maxAgeErr == nil {
+			list = append(list, "Не младше "+fmt.Sprint(minAge))
 		} else { // akshually u can write it in html/template but me stupid amd now im too lazy to do it
 			list = append(list, "Любого возраста")
 		}

@@ -403,7 +403,7 @@ func (s *IStats) calcAvgSalaryPerAge(age int) float32 {
 	return newSalary
 }
 
-func (s *IStats) CalcChance(age int, race string, height int, money int, excludeMarried bool) float32 {
+func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, money int, excludeMarried bool) float32 {
 	var marriedChance float32
 	if excludeMarried {
 		marriedChance = .37
@@ -412,7 +412,7 @@ func (s *IStats) CalcChance(age int, race string, height int, money int, exclude
 	}
 
 	heightChance := s.calcHeightChance(float32(height))
-	ageChance := float32(s.calcAgeChange(float32(age))) / float32(s.Total)
+	ageChance := float32(s.calcAgeChange(float32(minAge), float32(maxAge))) / float32(s.Total)
 	// salaryChance := s.calcSalaryChance(money)
 	if excludeMarried {
 		marriedChance = 1 - float32(s.Married)
@@ -428,16 +428,19 @@ func (s *IStats) CalcChance(age int, race string, height int, money int, exclude
 // 	s.calcAgeChange()
 // }
 
-func (s *IStats) calcAgeChange(value float32) int {
-	var result int
+func (s *IStats) calcAgeChange(minAge, maxAge float32) float32 {
+	var totalPeople int
+	var peopleInChance int
 	for ageRange, count := range s.Age {
 		min, minOk := strconv.Atoi(string(ageRange[0]))
 		max, maxOk := strconv.Atoi(string(ageRange[2]))
-		if minOk == nil && maxOk == nil && value >= float32(min) && value <= float32(max) {
-			result = count
+		totalPeople += count
+		if minOk == nil && maxOk == nil && (minAge >= float32(min) && minAge <= float32(max)) || (maxAge <= float32(max) || maxAge >= float32(min)) {
+			peopleInChance += count
 		}
 	}
-	return result
+	chance := float32(peopleInChance) / float32(totalPeople)
+	return chance
 }
 
 func (s *IStats) calcHeightChance(value float32) float32 {

@@ -69,17 +69,20 @@ func main() {
 	})
 
 	e.GET("/result", func(c echo.Context) error {
+		minAge, minAgeErr := strconv.Atoi(c.QueryParam("age-min"))
+		maxAge, maxAgeErr := strconv.Atoi(c.QueryParam("age-max"))
+
 		age, ageOk := strconv.Atoi(c.QueryParam("age"))
 		race := c.QueryParam("race")
 		height, heightOk := strconv.Atoi(c.QueryParam("height"))
 		money, moneyOk := strconv.Atoi(c.QueryParam("money"))
 		isMarried, _ := strconv.ParseBool(c.QueryParam("married"))
 
-		if moneyOk != nil || heightOk != nil || ageOk != nil {
+		if moneyOk != nil || heightOk != nil || ageOk != nil || minAgeErr != nil || maxAgeErr != nil {
 			return errors.New("Some value is missing")
 		}
 
-		chance := data.Stats.CalcChance(age, race, height, money, isMarried)
+		chance := data.Stats.CalcChance(minAge, maxAge, race, height, money, isMarried)
 
 		var score int
 		var img string

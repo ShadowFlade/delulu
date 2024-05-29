@@ -43,7 +43,7 @@ func newPage() Page {
 }
 
 type FormResults struct {
-	List      []string
+	List      []template.HTML
 	Age       int
 	Race      string
 	Height    int
@@ -65,7 +65,9 @@ func main() {
 		return c.Render(200, "index", struct {
 			Page   string
 			Header string
-		}{Page: "index", Header: "header"})
+			Age1   int
+			Age2   int
+		}{Page: "index", Header: "header", Age1: 20, Age2: 30})
 	})
 
 	e.GET("/result", func(c echo.Context) error {
@@ -118,10 +120,10 @@ func main() {
 			img = "6.jpg"
 		}
 
-		list := make([]string, 0)
-
+		list := make([]template.HTML, 0)
+		fmt.Println(minAge, " min age")
 		if minAgeErr == nil || maxAgeErr == nil {
-			list = append(list, "Не младше "+fmt.Sprint(minAge))
+			list = append(list, template.HTML("Между <span>"+fmt.Sprint(minAge)+"</span> и <span>"+fmt.Sprint(maxAge)))
 		} else { // akshually u can write it in html/template but me stupid amd now im too lazy to do it
 			list = append(list, "Любого возраста")
 		}
@@ -129,19 +131,19 @@ func main() {
 		if race == "any" {
 			list = append(list, "Любой этнической принадлежности")
 		} else {
-			list = append(list, raceMap[race])
+			list = append(list, template.HTML(raceMap[race]))
 		}
 
 		if heightOk == nil {
-			list = append(list, "Как минимум "+fmt.Sprint(height)+" см")
+			list = append(list, template.HTML("Как минимум <span>"+fmt.Sprint(height)+"</span> см"))
 		} else {
 			list = append(list, "Любого роста")
 		}
 
 		if moneyOk == nil {
-			list = append(list, "Должен зарабатывать как минимум "+fmt.Sprint(money/1000)+" т.р.")
+			list = append(list, template.HTML("Должен зарабатывать как минимум <span>"+fmt.Sprint(money/1000)+"</span> т.р."))
 		} else {
-			list = append(list, "Любой заработок")
+			list = append(list, template.HTML("Любой заработок"))
 		}
 
 		if isMarried {

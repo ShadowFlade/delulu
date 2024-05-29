@@ -1,7 +1,7 @@
 {{ block "sliderRange" . }}
 <div class="calculator__range-container">
-  <tc-range-slider id="js-slider-range-age" value1="40"  step="1"
-	min="19" max="60" value2="60"
+  <tc-range-slider id="js-slider-range-age" value1="{{ .Age1 }}" value2="{{ .Age2 }}" step="1"
+	min="19" max="60" 
   slider-width="100%"
 	moving-tooltip="true"
   moving-tooltip-distance-to-pointer="40"
@@ -12,8 +12,8 @@
   slider-height="6px"
   css-links="../static/slider_range2/slider_range2.css"
 	></tc-range-slider>
-  <input type="hidden" name="age-max">
-  <input type="hidden" name="age-min">
+  <input type="hidden" name="age-max" value="{{ .Age1 }}">
+  <input type="hidden" name="age-min" value="{{ .Age2 }}">
 
 </div>
 

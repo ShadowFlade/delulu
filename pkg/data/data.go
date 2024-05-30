@@ -53,42 +53,42 @@ var Stats = IStats{
 		"other":        6.00,
 	},
 	Height: HeightMap{
-		165.00: 0.15,
-		166.00: 0.67,
-		167.00: 1.18,
-		168.00: 1.69,
-		169.00: 2.20,
-		170.00: 2.72,
-		171.00: 3.23,
-		172.00: 3.74,
-		173.00: 4.26,
-		174.00: 5.75,
-		175.00: 7.15,
-		176.00: 8.55,
-		177.00: 9.95,
-		178.00: 9.61,
-		179.00: 8.11,
-		180.00: 6.61,
-		181.00: 5.11,
-		182.00: 4.02,
-		183.00: 3.55,
-		184.00: 3.08,
-		185.00: 2.62,
-		186.00: 2.15,
-		187.00: 1.68,
-		188.00: 1.21,
-		189.00: 0.75,
-		190.00: 0.28,
-		191.00: 0.00,
-		192.00: 0.00,
-		193.00: 0.00,
-		194.00: 0.00,
-		195.00: 0.00,
-		196.00: 0.00,
-		197.00: 0.00,
-		198.00: 0.00,
-		199.00: 0.00,
-		200.00: 0.00,
+		165.00: 0.14827,
+		166.00: 0.66827,
+		167.00: 1.17827,
+		168.00: 1.68827,
+		169.00: 2.19827,
+		170.00: 2.71827,
+		171.00: 3.22827,
+		172.00: 3.73827,
+		173.00: 4.25827,
+		174.00: 5.74827,
+		175.00: 7.14827,
+		176.00: 8.54827,
+		177.00: 9.94827,
+		178.00: 9.60827,
+		179.00: 8.10827,
+		180.00: 6.60827,
+		181.00: 5.10827,
+		182.00: 4.01827,
+		183.00: 3.54827,
+		184.00: 3.07827,
+		185.00: 2.61827,
+		186.00: 2.14827,
+		187.00: 1.67827,
+		188.00: 1.20827,
+		189.00: 0.74827,
+		190.00: 0.27827,
+		191.00: 0.005,
+		192.00: 0.005,
+		193.00: 0.005,
+		194.00: 0.005,
+		195.00: 0.005,
+		196.00: 0.005,
+		197.00: 0.005,
+		198.00: 0.005,
+		199.00: 0.005,
+		200.00: 0.005,
 	},
 	Salary: ISphere{
 		"автомобильный бизнес": ISphereDescription{
@@ -382,9 +382,10 @@ var Stats = IStats{
 	},
 }
 
-func (s *IStats) calcAvgSalaryPerAge(age int) float32 {
+func (s *IStats) calcAvgSalaryPerAge(age int) (float32, float32) {
 	var salary float32
 	var count int
+	maxSalary := 0
 	for _, v := range s.Salary {
 		isSalaryChanging := (v.Salary.Mid - v.Salary.End) > 0
 		isShouldSalaryRise := age > v.Age.Start && age <= v.Age.Mid
@@ -393,16 +394,25 @@ func (s *IStats) calcAvgSalaryPerAge(age int) float32 {
 		if isSalaryChanging && isShouldSalaryRise {
 			step = (float32(v.Salary.Mid - v.Salary.Start)) / (float32(v.Age.Mid - v.Age.Start))
 			salary = float32(v.Salary.Start) + step*float32((age-v.Age.Start))
+			if v.Salary.Mid > maxSalary {
+				maxSalary = v.Salary.Mid
+			}
 		} else if isSalaryChanging && !isShouldSalaryRise {
 			step = (float32(v.Salary.Mid - v.Salary.End)) / (float32(v.Age.End - v.Age.Mid))
 			salary = float32(v.Salary.Mid) - step*float32((age-v.Age.Mid))
+			if v.Salary.End > maxSalary {
+				maxSalary = v.Salary.End
+			}
 		} else if !isSalaryChanging {
 			salary += float32(v.Salary.End) //берем любое значение
+			if v.Salary.End > maxSalary {
+				maxSalary = v.Salary.End
+			}
 		}
 		count += 1
 	}
-	newSalary := salary / float32(count)
-	return newSalary
+	avgSalary := salary / float32(count)
+	return avgSalary, float32(maxSalary)
 }
 
 func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, money int, excludeMarried bool) float32 {
@@ -421,8 +431,9 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 	} else {
 		marriedChance = 1
 	}
-	// fmt.Println(heightChance, ageChance, marriedChance, salaryChance)
 	chance := heightChance * ageChance * marriedChance * salaryChance
+	fmt.Println(ageChance)
+
 	return chance
 }
 
@@ -430,6 +441,10 @@ func (s *IStats) calcSalaryChance(money int) float32 {
 
 	var totalPeople int
 	var pplWithDesiredMoney float32
+	var chance float32
+	veryHighSalaryChance := 0.005 //this is uncalculated for, maybe will find stats later for men with salary >500k
+	var avgSalary float32
+	var maxSalary float32
 	for age, ppl := range s.Age {
 		ageRange := strings.Split(age, " - ")
 		ageMin, _ := strconv.Atoi(ageRange[0])
@@ -437,15 +452,27 @@ func (s *IStats) calcSalaryChance(money int) float32 {
 		pplPerAge := float32(ppl) / float32(ageMax-ageMin+1)
 
 		for i := ageMin; i <= ageMax; i++ {
-			salary := s.calcAvgSalaryPerAge(i)
-			if salary >= float32(money) {
+			avgSalaryTemp, maxSalaryTemp := s.calcAvgSalaryPerAge(i)
+			avgSalary = avgSalaryTemp
+			if maxSalaryTemp > maxSalary {
+				maxSalary = maxSalaryTemp
+			}
+			if avgSalary >= float32(money) {
 				pplWithDesiredMoney += pplPerAge
 			}
 			totalPeople += int(pplPerAge)
 		}
+		if float64(avgSalary) >= veryHighSalaryChance {
+			chance += float32(veryHighSalaryChance)
+		}
 	}
-	chance := pplWithDesiredMoney / float32(totalPeople)
-	fmt.Println(pplWithDesiredMoney, totalPeople)
+
+	chance = pplWithDesiredMoney / float32(totalPeople)
+	if chance == 0.00 && maxSalary > float32(money) {
+		chance = 2
+	} else if chance == 0.00 && maxSalary < float32(money) {
+		chance = 0.005
+	}
 	return chance
 }
 
@@ -456,6 +483,7 @@ func (s *IStats) calcAgeChance(minAge, maxAge float32) float32 {
 		min, minOk := strconv.Atoi(string(ageRange[0]))
 		max, maxOk := strconv.Atoi(string(ageRange[2]))
 		totalPeople += count
+		fmt.Println(minAge, min, maxAge, max)
 		if minOk == nil && maxOk == nil && (minAge >= float32(min) && minAge <= float32(max)) || (maxAge <= float32(max) || maxAge >= float32(min)) {
 			peopleInChance += count
 		}

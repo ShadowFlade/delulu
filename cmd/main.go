@@ -152,8 +152,7 @@ func main() {
 			list = append(list, "Семейное положение <span class='answer'>не важно</span>")
 		}
 
-		race = raceMap[race]
-
+		fmt.Println(chance)
 		formResults := FormResults{
 			List:      list,
 			IsMarried: isMarried,

@@ -65,7 +65,7 @@ code {
 
 @media(max-width:700px) {
     .title {
-        font-size: 11vw;
+        font-size: 8vw;
     }
 }
 
@@ -89,12 +89,12 @@ code {
     display: flex;
     align-items: center;
     padding-inline: 30px;
+    position: relative;
 }
 
 .main-logo {
     width: 60px;
     position: relative;
-    top: -20px;
 }
 
 .container {
@@ -107,14 +107,26 @@ code {
     display: flex;
     gap: 1.5rem;
     padding: 2rem 0 2rem;
+    align-items: center;
 
 }
 
 .header__app-state {
     color: #7a6e6e61;
-    width: 0;
     overflow-x: visible;
     white-space: nowrap;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media(max-width:700px) {
+    .header__app-state {
+        top: 0;
+        transform: translateY(0%);
+        left: 0;
+        padding-left: 10px;
+    }
 }
 
 /* --------------- INPUTS COMMON --------------------- */
@@ -138,6 +150,12 @@ code {
     margin-bottom: 2rem;
     margin-top: 2rem;
     text-align: center;
+}
+
+@media(max-width:700px) {
+    .title--secondary {
+        font-size: 6vw;
+    }
 }
 
 .calculator__items {
@@ -254,6 +272,7 @@ code {
     margin-bottom: 3rem;
     background-color: rgb(254, 154, 224);
     border-radius: 8px;
+    font-size: 20px;
 }
 
 .calculator__fake-checkbox {

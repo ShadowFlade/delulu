@@ -106,7 +106,6 @@ func main() {
 		}
 
 		chance := data.Stats.CalcChance(minAge, maxAge, race, height, money, isMarried) * 100
-		fmt.Println(chance, "chance")
 
 		var score int
 		var img string

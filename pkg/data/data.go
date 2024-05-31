@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -395,7 +394,6 @@ func (s *IStats) calcAvgSalaryPerAge(age int) (float64, float64) {
 		if isSalaryChanging && isShouldSalaryRise {
 			step = (float32(v.Salary.Mid - v.Salary.Start)) / (float32(v.Age.Mid - v.Age.Start))
 			salary += float32(v.Salary.Start) + step*float32((age-v.Age.Start))
-			fmt.Println(step, " step", salary, " salary", age, v.Age.Start, v.Salary.Start)
 
 			if v.Salary.Mid > maxSalary {
 				maxSalary = v.Salary.Mid
@@ -435,7 +433,6 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 		marriedChance = 1
 	}
 	chance := heightChance * ageChance * marriedChance * salaryChance
-	fmt.Println(heightChance, ageChance, marriedChance, salaryChance)
 	chance = float32(int(chance*1000)) / 1000
 
 	return chance
@@ -453,14 +450,11 @@ func (s *IStats) calcSalaryChance(desiredSalary int) float32 {
 		ageRange := strings.Split(age, " - ")
 		ageMin, _ := strconv.Atoi(ageRange[0])
 		ageMax, _ := strconv.Atoi(ageRange[1])
-		// fmt.Println(ageMax, ageMin, " age max min")
 		pplPerAge := float32(ppl) / float32(ageMax-ageMin+1)
 
 		for i := ageMin; i <= ageMax; i++ {
-			// fmt.Println(i, " age")
 			avgSalaryTemp, maxSalaryTemp := s.calcAvgSalaryPerAge(i)
 			avgSalary = avgSalaryTemp
-			// fmt.Println(avgSalary, desiredSalary, " avg salary")
 			if maxSalaryTemp > maxSalary {
 				maxSalary = maxSalaryTemp
 			}
@@ -475,12 +469,11 @@ func (s *IStats) calcSalaryChance(desiredSalary int) float32 {
 	}
 
 	chance = pplWithDesiredMoney / float32(totalPeople)
-	// fmt.Println(pplWithDesiredMoney, totalPeople, "desired")
-	// if chance == 0.00 && maxSalary > float64(desiredSalary) {
-	// 	chance = 2
-	// } else if chance == 0.00 && maxSalary < float64(desiredSalary) {
-	// 	chance = 0.005
-	// }
+	if chance == 0.00 && maxSalary > float64(desiredSalary) {
+		chance = 2
+	} else if chance == 0.00 && maxSalary < float64(desiredSalary) {
+		chance = 0.005
+	}
 	return chance
 }
 

@@ -424,7 +424,7 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 	}
 
 	heightChance := s.calcHeightChance(float32(height))
-	ageChance := float32(s.calcAgeChance(float32(minAge), float32(maxAge))) / float32(s.Total)
+	ageChance := float32(s.calcAgeChance(float32(minAge), float32(maxAge)))
 	salaryChance := s.calcSalaryChance(money)
 	if excludeMarried {
 		marriedChance = 1 - float32(s.Married)
@@ -479,15 +479,18 @@ func (s *IStats) calcSalaryChance(money int) float32 {
 func (s *IStats) calcAgeChance(minAge, maxAge float32) float32 {
 	var totalPeople int
 	var peopleInChance int
+
 	for ageRange, count := range s.Age {
-		min, minOk := strconv.Atoi(string(ageRange[0]))
-		max, maxOk := strconv.Atoi(string(ageRange[2]))
+		ageSplit := strings.Split(ageRange, " - ")
+		min, minOk := strconv.Atoi(string(ageSplit[0]))
+		max, maxOk := strconv.Atoi(string(ageSplit[1]))
 		totalPeople += count
 		fmt.Println(minAge, min, maxAge, max)
 		if minOk == nil && maxOk == nil && (minAge >= float32(min) && minAge <= float32(max)) || (maxAge <= float32(max) || maxAge >= float32(min)) {
 			peopleInChance += count
 		}
 	}
+	fmt.Println(peopleInChance, totalPeople)
 	chance := float32(peopleInChance) / float32(totalPeople)
 	return chance
 }

@@ -55,13 +55,27 @@ type FormResults struct {
 	Page      string
 }
 
+type IPages struct {
+	INDEX     string
+	RESULT    string
+	ABOUT     string
+	RESOURCES string
+}
+
+var Pages = IPages{
+	INDEX:     "",
+	RESULT:    "result",
+	ABOUT:     "about",
+	RESOURCES: "resources",
+}
+
 func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Renderer = newTemplate()
 	e.Static("/static", "static")
 
-	e.GET("/", func(c echo.Context) error {
+	e.GET("/"+Pages.INDEX, func(c echo.Context) error {
 		return c.Render(200, "index", struct {
 			Page   string
 			Header string
@@ -70,7 +84,7 @@ func main() {
 		}{Page: "index", Header: "header", Age1: 20, Age2: 30})
 	})
 
-	e.GET("/result", func(c echo.Context) error {
+	e.GET("/"+Pages.RESULT, func(c echo.Context) error {
 		minAge, minAgeErr := strconv.Atoi(c.QueryParam("age-min"))
 		maxAge, maxAgeErr := strconv.Atoi(c.QueryParam("age-max"))
 		race := c.QueryParam("race")
@@ -158,15 +172,22 @@ func main() {
 			Chance:    chance,
 			Score:     score,
 			Img:       img,
-			Page:      "result",
+			Page:      Pages.RESULT,
 		}
 		c.Render(200, "index", formResults)
 		return nil
 	})
 
-	e.GET("/about", func(c echo.Context) error {
+	e.GET("/"+Pages.ABOUT, func(c echo.Context) error {
 		c.Render(200, "index", struct{ Page string }{
-			Page: "about",
+			Page: Pages.ABOUT,
+		})
+		return nil
+	})
+
+	e.GET("/"+Pages.RESOURCES, func(c echo.Context) error {
+		c.Render(200, "index", struct{ Page string }{
+			Page: Pages.RESOURCES,
 		})
 		return nil
 	})

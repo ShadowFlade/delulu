@@ -27,6 +27,10 @@
     {{ template "about" . }}
 {{ end }}
 
+{{ if (eq .Page "resources") }}
+    {{ template "resources" . }}
+{{ end }}
+
 {{ template "footer" }}
 
 {{ end }}

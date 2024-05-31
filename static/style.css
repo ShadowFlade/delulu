@@ -330,3 +330,11 @@ code {
 .about__eng {
     color:#5000ff;
 }
+
+/* ------------------- RESOURCES ---------------------- */
+.resources__item {
+    margin-top:1.5rem;
+}
+.resources__item:first-child {
+    margin-top:0;
+}

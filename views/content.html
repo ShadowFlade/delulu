@@ -20,7 +20,11 @@
 {{ end }}
 
 {{ if (eq .Page "index") }}
-{{ template "calculator" . }}
+    {{ template "calculator" . }}
+{{ end }}
+
+{{ if (eq .Page "about") }}
+    {{ template "about" . }}
 {{ end }}
 
 {{ template "footer" }}

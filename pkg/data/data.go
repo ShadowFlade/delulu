@@ -382,9 +382,10 @@ var Stats = IStats{
 	},
 }
 
-func (s *IStats) calcAvgSalaryPerAge(age int) (float32, float32) {
+func (s *IStats) calcAvgSalaryPerAge(age int) (float64, float64) {
 	var salary float32
 	var count int
+	var manSalaryMultiplier = .15 //there is stats about ppl in general, mens salary a bit higher
 	maxSalary := 0
 	for _, v := range s.Salary {
 		isSalaryChanging := (v.Salary.Mid - v.Salary.End) > 0
@@ -411,8 +412,8 @@ func (s *IStats) calcAvgSalaryPerAge(age int) (float32, float32) {
 		}
 		count += 1
 	}
-	avgSalary := salary / float32(count)
-	return avgSalary, float32(maxSalary)
+	avgSalary := float64(salary) * manSalaryMultiplier / float64(count)
+	return avgSalary, float64(maxSalary) * manSalaryMultiplier
 }
 
 func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, money int, excludeMarried bool) float32 {
@@ -432,6 +433,7 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 		marriedChance = 1
 	}
 	chance := heightChance * ageChance * marriedChance * salaryChance
+	chance = float32(int(chance*1000)) / 1000
 	fmt.Println(ageChance)
 
 	return chance
@@ -443,8 +445,8 @@ func (s *IStats) calcSalaryChance(money int) float32 {
 	var pplWithDesiredMoney float32
 	var chance float32
 	veryHighSalaryChance := 0.005 //this is uncalculated for, maybe will find stats later for men with salary >500k
-	var avgSalary float32
-	var maxSalary float32
+	var avgSalary float64
+	var maxSalary float64
 	for age, ppl := range s.Age {
 		ageRange := strings.Split(age, " - ")
 		ageMin, _ := strconv.Atoi(ageRange[0])
@@ -457,7 +459,7 @@ func (s *IStats) calcSalaryChance(money int) float32 {
 			if maxSalaryTemp > maxSalary {
 				maxSalary = maxSalaryTemp
 			}
-			if avgSalary >= float32(money) {
+			if avgSalary >= float64(money) {
 				pplWithDesiredMoney += pplPerAge
 			}
 			totalPeople += int(pplPerAge)
@@ -468,9 +470,9 @@ func (s *IStats) calcSalaryChance(money int) float32 {
 	}
 
 	chance = pplWithDesiredMoney / float32(totalPeople)
-	if chance == 0.00 && maxSalary > float32(money) {
+	if chance == 0.00 && maxSalary > float64(money) {
 		chance = 2
-	} else if chance == 0.00 && maxSalary < float32(money) {
+	} else if chance == 0.00 && maxSalary < float64(money) {
 		chance = 0.005
 	}
 	return chance
@@ -485,12 +487,10 @@ func (s *IStats) calcAgeChance(minAge, maxAge float32) float32 {
 		min, minOk := strconv.Atoi(string(ageSplit[0]))
 		max, maxOk := strconv.Atoi(string(ageSplit[1]))
 		totalPeople += count
-		fmt.Println(minAge, min, maxAge, max)
 		if minOk == nil && maxOk == nil && (minAge >= float32(min) && minAge <= float32(max)) || (maxAge <= float32(max) || maxAge >= float32(min)) {
 			peopleInChance += count
 		}
 	}
-	fmt.Println(peopleInChance, totalPeople)
 	chance := float32(peopleInChance) / float32(totalPeople)
 	return chance
 }

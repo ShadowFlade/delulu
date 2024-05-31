@@ -24,8 +24,23 @@ img {
     width: 100%;
 }
 
+code {
+    padding: .2em .4em;
+    margin: 0;
+    font-size: 85%;
+    white-space: break-spaces;
+    border-radius: 6px;
+    background-color: rgba(220, 224, 228, 0.1) !important;
+}
+
 .main-image {
     width: 550px;
+}
+
+@media(max-width:700px) {
+    .main-image {
+        width: 70vw;
+    }
 }
 
 .main-image__wrapper {
@@ -41,6 +56,12 @@ img {
 
 .title--secondary {
     font-size: 2.5rem;
+}
+
+@media(max-width:700px) {
+    .title {
+        font-size: 11vw;
+    }
 }
 
 .calculator__title {
@@ -59,12 +80,10 @@ img {
 /* --------------------- HEADER ----------------------- */
 .header {
     margin-bottom: 2rem;
-    width: fit-content;
-    margin-inline: auto;
-}
-
-.header__menu {
-    padding: 2rem 0 2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-inline: 30px;
 }
 
 .container {
@@ -76,6 +95,15 @@ img {
 .header__menu {
     display: flex;
     gap: 1.5rem;
+    padding: 2rem 0 2rem;
+
+}
+
+.header__app-state {
+    color: #7a6e6e61;
+    width: 0;
+    overflow-x: visible;
+    white-space: nowrap;
 }
 
 /* --------------- INPUTS COMMON --------------------- */
@@ -185,6 +213,7 @@ img {
     --fake-radio-width: 19px;
     width: var(--fake-radio-width);
     height: var(--fake-radio-width);
+    min-width: var(--fake-radio-width);
     border-radius: 50%;
     background-color: rgb(125, 3, 83);
     position: relative;
@@ -200,7 +229,7 @@ img {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    margin-top: 3rem;
+    margin-top: 1rem;
 }
 
 .calculator__input-group:has(.calculator__range) {
@@ -287,4 +316,17 @@ img {
 
 .answer {
     color: #51dcff;
+}
+
+/* ------------------- ABOUT ---------------------- */
+.about__text {
+    margin-top: 2rem;
+    line-height:1.7;
+}
+
+.about__text:first-child {
+    margin-top: 0;
+}
+.about__eng {
+    color:#5000ff;
 }

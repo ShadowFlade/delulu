@@ -152,7 +152,6 @@ func main() {
 			list = append(list, "Семейное положение <span class='answer'>не важно</span>")
 		}
 
-		fmt.Println(chance)
 		formResults := FormResults{
 			List:      list,
 			IsMarried: isMarried,
@@ -162,6 +161,13 @@ func main() {
 			Page:      "result",
 		}
 		c.Render(200, "index", formResults)
+		return nil
+	})
+
+	e.GET("/about", func(c echo.Context) error {
+		c.Render(200, "index", struct{ Page string }{
+			Page: "about",
+		})
 		return nil
 	})
 

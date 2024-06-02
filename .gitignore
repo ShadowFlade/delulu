@@ -24,3 +24,6 @@ tmp/main
 tmp/build-errors.log
 tmp/**/*
 node_modules/
+.env
+.env.local
+*.sql

@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"io"
 	"math/rand"
+	"os"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -70,12 +71,15 @@ var Pages = IPages{
 }
 
 func main() {
+	dbName := os.Getenv("DB_NAME")
+
+	fmt.Println(dbName)
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Renderer = newTemplate()
 	e.Static("/static", "static")
 
-	e.GET("/"+Pages.INDEX, func(c echo.Context) error {
+	e.GET("/", func(c echo.Context) error {
 		return c.Render(200, "index", struct {
 			Page   string
 			Header string

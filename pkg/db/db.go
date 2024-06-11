@@ -4,10 +4,24 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/go-sql-driver/mysql"
+	"github.com/gofor-little/env"
 )
+
+type IStatistics struct {
+	ID           int
+	AGE_MIN      int
+	AGE_MAX      int
+	AGE          string
+	SALARY       string
+	PRICE        float32
+	RACE         string
+	HEIGHT       int
+	IS_MARRIED   bool
+	IP           interface{}
+	DATE_CREATED string
+}
 
 type Db struct {
 	db              *sql.DB
@@ -15,16 +29,21 @@ type Db struct {
 	ipsTable        string
 }
 
-func (d *Db) connect() {
+func (d *Db) Connect() {
+	if err := env.Load("./.env.local"); err != nil {
+		panic(err)
+	}
 	cfg := mysql.Config{
-		User:   os.Getenv("DB_LOGIN"),
-		Passwd: os.Getenv("DB_PASS"),
-		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
-		DBName: "DB_NAME",
+		User:                 env.Get("DB_LOGIN", "i"),
+		Passwd:               "",
+		Net:                  "tcp",
+		Addr:                 "127.0.0.1:3306",
+		DBName:               env.Get("DB_NAME", "your"),
+		AllowNativePasswords: true,
 	}
 
-	d.ipsTable = os.Getenv("unique_ips_temp")
+	d.ipsTable = env.Get("DB_IPS_TABLE", "mom")
+	d.statisticsTable = env.Get("DB_STATISTICS_TABLE", ";)")
 	var err error
 	d.db, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
@@ -38,25 +57,32 @@ func (d *Db) connect() {
 	fmt.Println("Connected!")
 }
 
-func (d *Db) WriteStatistics(fields map[string]interface{}) error {
-	for _, val := range fields {
+// func (d *Db) WriteStatistics(fields map[string]interface{}) error {
+// 	var stats map[string]interface{};
+// 	for _, val := range fields {
+// 		d.db.Query()
+// 	}
+// }
 
-	}
-}
-
-func (d *Db) GetStatistics() (error, map[string]interface{}) {
-	var statistics []map[string]interface{}
-	rows, err := d.db.Query("SELECT * FROM ? WHERE", d.statisticsTable)
+func (d *Db) GetStatistics() ([]IStatistics, error) {
+	var statistics []IStatistics
+	rows, err := d.db.Query("SELECT * FROM statistics")
 	if err != nil {
-		return fmt.Errorf("i guess im dumb"), nil
+		return nil, fmt.Errorf("i guess im dumb")
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var statRow map[string]interface{}
-		//TODO should i populate keys first lol?
-		if err := rows.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
-			return fmt.Errorf("i guess im dumb"), nil
+		var statRow IStatistics
+		if err := rows.Scan(&statRow.ID, &statRow.AGE_MIN, &statRow.AGE_MAX, &statRow.AGE, &statRow.SALARY, &statRow.PRICE, &statRow.RACE, &statRow.HEIGHT, &statRow.IS_MARRIED, &statRow.IP, &statRow.DATE_CREATED); err != nil {
+			return nil, fmt.Errorf("albumsByArtist %q", err)
 		}
-		albums = append(albums, alb)
+		//when can this trigger?
+		statistics = append(statistics, statRow)
+		if err := rows.Err(); err != nil {
+
+			return nil, fmt.Errorf("wut")
+		}
 	}
+
+	return statistics, nil
 }

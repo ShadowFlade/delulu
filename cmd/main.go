@@ -2,6 +2,7 @@ package main
 
 import (
 	"delulu/pkg/data"
+	"delulu/pkg/db"
 	"errors"
 	"fmt"
 	"html/template"
@@ -71,6 +72,13 @@ var Pages = IPages{
 }
 
 func main() {
+	db := db.Db{}
+	db.Connect()
+	stats, err := db.GetStatistics()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Println(stats)
 	dbName := os.Getenv("DB_NAME")
 
 	fmt.Println(dbName)

@@ -54,11 +54,9 @@ func (d *Db) Connect() {
 	if pingErr != nil {
 		log.Fatal(pingErr)
 	}
-	fmt.Println("Connected!")
 }
 
-func (d *Db) GetStatistics() ([]string, error) {
-	var stats []string
+func (d *Db) GetStatistics() ([]map[string]string, error) {
 	rows, err := d.db.Query("SELECT * FROM statistics")
 
 	if err != nil {
@@ -66,15 +64,19 @@ func (d *Db) GetStatistics() ([]string, error) {
 	}
 	defer rows.Close()
 
-	stats, err = parseValues(rows)
+	stats, err := parseValues(rows)
 	if err != nil {
 		return nil, err
 	}
 	return stats, nil
 }
 
-func parseValues(rows *sql.Rows) ([]string, error) {
-	var results []string
+type RowsResult interface {
+	[][]string
+}
+
+func parseValues[T RowsResult](rows *sql.Rows) ([]map[string]string, error) {
+	var results T
 	var columns []interface{}
 	cols, err := rows.Columns()
 
@@ -82,23 +84,37 @@ func parseValues(rows *sql.Rows) ([]string, error) {
 		return nil, err
 	}
 
-	for _, val := range cols {
+	for range cols {
 		columns = append(columns, new(string))
-        fmt.Println(val)
 	}
 
 	for rows.Next() {
+		var result []string
 		err := rows.Scan(columns...)
-        fmt.Println(columns," columns")
 
 		if err != nil {
-            return nil, fmt.Errorf("scan result error:%s", err)
+			return nil, fmt.Errorf("scan result error:%s", err)
 		}
 
-        for _, val := range columns {
-            strVal := *val.(*string)
-            results = append(results, strVal);
-        }
+		for _, val := range columns {
+			strVal := *val.(*string)
+			result = append(result, strVal)
+		}
+		results = append(results, result)
 	}
-	return results, nil
+
+	mapResults := make([]map[string]string, len(results))
+
+	for _, rowResult := range results {
+
+		temp := map[string]string{}
+		for index, val := range rowResult {
+			temp[cols[index]] = val
+		}
+
+		mapResults = append(mapResults, temp)
+        temp = nil
+	}
+
+	return mapResults, nil
 }

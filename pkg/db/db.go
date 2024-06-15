@@ -57,32 +57,48 @@ func (d *Db) Connect() {
 	fmt.Println("Connected!")
 }
 
-// func (d *Db) WriteStatistics(fields map[string]interface{}) error {
-// 	var stats map[string]interface{};
-// 	for _, val := range fields {
-// 		d.db.Query()
-// 	}
-// }
-
-func (d *Db) GetStatistics() ([]IStatistics, error) {
-	var statistics []IStatistics
+func (d *Db) GetStatistics() ([]string, error) {
+	var stats []string
 	rows, err := d.db.Query("SELECT * FROM statistics")
+
 	if err != nil {
 		return nil, fmt.Errorf("i guess im dumb")
 	}
 	defer rows.Close()
-	for rows.Next() {
-		var statRow IStatistics
-		if err := rows.Scan(&statRow.ID, &statRow.AGE_MIN, &statRow.AGE_MAX, &statRow.AGE, &statRow.SALARY, &statRow.PRICE, &statRow.RACE, &statRow.HEIGHT, &statRow.IS_MARRIED, &statRow.IP, &statRow.DATE_CREATED); err != nil {
-			return nil, fmt.Errorf("albumsByArtist %q", err)
-		}
-		//when can this trigger?
-		statistics = append(statistics, statRow)
-		if err := rows.Err(); err != nil {
 
-			return nil, fmt.Errorf("wut")
-		}
+	stats, err = parseValues(rows)
+	if err != nil {
+		return nil, err
+	}
+	return stats, nil
+}
+
+func parseValues(rows *sql.Rows) ([]string, error) {
+	var results []string
+	var columns []interface{}
+	cols, err := rows.Columns()
+
+	if err != nil {
+		return nil, err
 	}
 
-	return statistics, nil
+	for _, val := range cols {
+		columns = append(columns, new(string))
+        fmt.Println(val)
+	}
+
+	for rows.Next() {
+		err := rows.Scan(columns...)
+        fmt.Println(columns," columns")
+
+		if err != nil {
+            return nil, fmt.Errorf("scan result error:%s", err)
+		}
+
+        for _, val := range columns {
+            strVal := *val.(*string)
+            results = append(results, strVal);
+        }
+	}
+	return results, nil
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/gofor-little/env"
+	"strings"
 )
 
 type IStatistics struct {
@@ -27,6 +28,7 @@ type Db struct {
 	db              *sql.DB
 	statisticsTable string
 	ipsTable        string
+	cols            []string
 }
 
 func (d *Db) Connect() {
@@ -56,6 +58,18 @@ func (d *Db) Connect() {
 	}
 }
 
+func (d *Db) getColumns(isPopulate bool) ([]string, error) {
+	rows, err := d.db.Query("SELECT * FROM statistics")
+	if err != nil {
+		return nil, err
+	}
+	cols, err := rows.Columns()
+	if isPopulate && d.cols == nil {
+		d.cols = cols
+	}
+	return cols, nil
+}
+
 func (d *Db) GetStatistics() ([]map[string]string, error) {
 	rows, err := d.db.Query("SELECT * FROM statistics")
 
@@ -65,10 +79,24 @@ func (d *Db) GetStatistics() ([]map[string]string, error) {
 	defer rows.Close()
 
 	stats, err := parseValues(rows)
+
 	if err != nil {
 		return nil, err
 	}
+
 	return stats, nil
+}
+
+func (d *Db) WriteStatistics(results []interface{}) (int, error) {
+
+	cols, err := d.getColumns(false)
+	if err != nil {
+		return 0, err
+	}
+
+	result, err := d.db.Exec("insert into statistics (?) values (?)", cols, strings.Join(results.([]string), ","))
+
+	return 0, nil
 }
 
 type RowsResult interface {

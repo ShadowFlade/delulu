@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -47,7 +48,7 @@ var Stats = IStats{
 	Married: 63,
 	Race: map[string]float32{
 		"slavs":        91.00,
-		"Middle_asian": 2.00,
+		"middle_asian": 2.00,
 		"exotic":       0.0000034,
 		"other":        6.00,
 	},
@@ -427,14 +428,15 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 	heightChance := s.calcHeightChance(float32(height))
 	ageChance := float32(s.calcAgeChance(float32(minAge), float32(maxAge)))
 	salaryChance := s.calcSalaryChance(money)
+	raceChance := s.Race[race] / 100
 	if excludeMarried {
 		marriedChance = 1 - float32(s.Married)
 	} else {
 		marriedChance = 1
 	}
-	chance := heightChance * ageChance * marriedChance * salaryChance
+	chance := heightChance * ageChance * marriedChance * salaryChance * raceChance
 	chance = float32(int(chance*1000)) / 1000
-
+	fmt.Println(heightChance, ageChance, salaryChance, raceChance, "fmt")
 	return chance
 }
 
@@ -494,13 +496,16 @@ func (s *IStats) calcAgeChance(minAge, maxAge float32) float32 {
 	return chance
 }
 
-func (s *IStats) calcHeightChance(value float32) float32 {
+func (s *IStats) calcHeightChance(height float32) float32 {
 	var heightPerc float32
-	for _, height := range s.Height {
-		heightPerc += height
-		if height == value {
-			break
+
+	for value, heightChance := range s.Height {
+		if height > value {
+			continue
+		} else if height <= value {
+			heightPerc += heightChance
 		}
 	}
+	fmt.Println(heightPerc, " height chance")
 	return heightPerc / 100
 }

@@ -335,6 +335,16 @@ code {
 
 .result__delusion img {
     border-radius: 8px;
+    width: auto;
+    max-height: 520px;
+    margin-inline: auto;
+    display: block;
+    max-width:100%;
+}
+
+.result__delusion figcaption {
+    text-align: center;
+    margin-top: 2rem;
 }
 
 .result__new {

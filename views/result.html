@@ -6,7 +6,7 @@
             <div class="calculator__item">
                 <ul class="result__list result__list--params">
                     {{ range $_, $val := .List }}
-                        <li class="result__option">{{$val}}</li>
+                    <li class="result__option">{{$val}}</li>
                     {{end}}
                 </ul>
             </div>
@@ -20,7 +20,10 @@
             </div>
             <h2 class="calculator__title calculator__title--result">Шкала заблуждения</h2>
             <div class="result__delusion">
-                <img src="/static/img/{{ .Img }}" alt="">
+                <figure>
+                    <img src="/static/img/{{ .Img }}" alt="">
+                    <figcaption>{{ .Text }} </figcaption>
+                </figure>
             </div>
         </section>
         <a href="/" class="result__new calculator__submit">Получить новый результат</a>

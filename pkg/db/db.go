@@ -106,14 +106,14 @@ func parseValues[T RowsResult](rows *sql.Rows) ([]map[string]string, error) {
 	mapResults := make([]map[string]string, len(results))
 
 	for _, rowResult := range results {
-
 		temp := map[string]string{}
+
 		for index, val := range rowResult {
 			temp[cols[index]] = val
 		}
 
 		mapResults = append(mapResults, temp)
-        temp = nil
+		temp = nil
 	}
 
 	return mapResults, nil

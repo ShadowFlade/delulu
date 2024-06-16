@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"delulu/pkg/data"
+	"delulu/pkg/db"
 	"errors"
 	"fmt"
 	"html/template"
@@ -132,7 +133,9 @@ func (this *Handlers) Result(c echo.Context) error {
 		Text:      text,
 		Page:      Pages.RESULT,
 	}
+	db := db.Db{}
+	db.Connect()
+	db.WriteStatistics(formResults)
 	c.Render(200, "index", formResults)
 	return nil
 }
-

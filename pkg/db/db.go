@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"reflect"
 
+
+    "delulu/pkg"
 	"github.com/go-sql-driver/mysql"
 	"github.com/gofor-little/env"
-	"strings"
 )
 
 type IStatistics struct {
@@ -87,16 +89,30 @@ func (d *Db) GetStatistics() ([]map[string]string, error) {
 	return stats, nil
 }
 
-func (d *Db) WriteStatistics(results []interface{}) (int, error) {
+func (d *Db) WriteStatistics(results struct{}) (int64, error) {
 
 	cols, err := d.getColumns(false)
 	if err != nil {
 		return 0, err
 	}
+	res := []interface{}{}
 
-	result, err := d.db.Exec("insert into statistics (?) values (?)", cols, strings.Join(results.([]string), ","))
+	for _, val := range results {
+		res = append(res, reflect.ValueOf(val))
+	}
 
-	return 0, nil
+	result, err := d.db.Exec("insert into statistics (?) values (?)", cols, res)
+
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := result.LastInsertId()
+
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
 }
 
 type RowsResult interface {

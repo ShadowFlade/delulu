@@ -41,7 +41,6 @@ func (d *Db) Connect() *sqlx.DB {
 	d.password = env.Get("DB_PASS", "fucked")
 	d.dbName = env.Get("DB_NAME", "urmom")
 
-	fmt.Println(d.login, d.password, d.dbName)
 	connectStr := fmt.Sprintf("%s:@(127.0.0.1:3306)/%s", d.login, d.dbName)
 	db, err := sqlx.Connect("mysql", connectStr)
 
@@ -62,7 +61,6 @@ func (d *Db) GetStatistics() ([]IStatistics, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(stats, " stats")
 	return stats, nil
 }
 
@@ -77,14 +75,12 @@ func (d *Db) WriteStatistics(stats interface{}) (int64, error) {
         :salary, :race, :height, :is_married, :ip, now())`, stats)
 
 	if err != nil {
-		fmt.Println(err, " some error")
 		return 0.00, err
 	}
 
 	id, err := res.LastInsertId()
 
 	if err != nil {
-		fmt.Println(err, " some error")
 		return 0.00, err
 	}
 

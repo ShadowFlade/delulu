@@ -40,6 +40,7 @@ func main() {
 	e.Renderer = newTemplate()
 	e.Static("/static", "static")
 	handlers := pkg.Handlers{}
+
 	e.GET("/", func(c echo.Context) error {
 		return c.Render(200, "index", struct {
 			Page   string

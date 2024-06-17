@@ -1,164 +1,98 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
-	"reflect"
-
-
-    "delulu/pkg"
-	"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofor-little/env"
+	"github.com/jmoiron/sqlx"
+	"log"
 )
 
 type IStatistics struct {
-	ID           int
-	AGE_MIN      int
-	AGE_MAX      int
-	AGE          string
-	SALARY       string
-	PRICE        float32
-	RACE         string
-	HEIGHT       int
-	IS_MARRIED   bool
-	IP           interface{}
-	DATE_CREATED string
+	ID           int         `db:"id"`
+	AGE_MIN      int         `db:"age_min"`
+	AGE_MAX      int         `db:"age_max"`
+	SALARY       string      `db:"salary"`
+	RACE         string      `db:"race"`
+	HEIGHT       int         `db:"height"`
+	IS_MARRIED   bool        `db:"is_married"`
+	IP           interface{} `db:"ip"`
+	DATE_CREATED string      `db:"date_created"`
 }
 
 type Db struct {
-	db              *sql.DB
+	db              *sqlx.DB
+	tx              *sqlx.Tx
+	dbName          string
+	login           string
+	password        string
 	statisticsTable string
 	ipsTable        string
 	cols            []string
 }
 
-func (d *Db) Connect() {
+func (d *Db) Connect() *sqlx.DB {
 	if err := env.Load("./.env.local"); err != nil {
 		panic(err)
 	}
-	cfg := mysql.Config{
-		User:                 env.Get("DB_LOGIN", "i"),
-		Passwd:               "",
-		Net:                  "tcp",
-		Addr:                 "127.0.0.1:3306",
-		DBName:               env.Get("DB_NAME", "your"),
-		AllowNativePasswords: true,
-	}
-
 	d.ipsTable = env.Get("DB_IPS_TABLE", "mom")
 	d.statisticsTable = env.Get("DB_STATISTICS_TABLE", ";)")
-	var err error
-	d.db, err = sql.Open("mysql", cfg.FormatDSN())
+	d.login = env.Get("DB_LOGIN", "i")
+	d.password = env.Get("DB_PASS", "fucked")
+	d.dbName = env.Get("DB_NAME", "urmom")
+
+	fmt.Println(d.login, d.password, d.dbName)
+	connectStr := fmt.Sprintf("%s:@(127.0.0.1:3306)/%s", d.login, d.dbName)
+	db, err := sqlx.Connect("mysql", connectStr)
+
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
-	pingErr := d.db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
+	d.db = db
+
+	return db
+
 }
 
-func (d *Db) getColumns(isPopulate bool) ([]string, error) {
-	rows, err := d.db.Query("SELECT * FROM statistics")
+func (d *Db) GetStatistics() ([]IStatistics, error) {
+	stats := []IStatistics{}
+
+	err := d.db.Select(&stats, "select * from statistics")
 	if err != nil {
 		return nil, err
 	}
-	cols, err := rows.Columns()
-	if isPopulate && d.cols == nil {
-		d.cols = cols
-	}
-	return cols, nil
-}
-
-func (d *Db) GetStatistics() ([]map[string]string, error) {
-	rows, err := d.db.Query("SELECT * FROM statistics")
-
-	if err != nil {
-		return nil, fmt.Errorf("i guess im dumb")
-	}
-	defer rows.Close()
-
-	stats, err := parseValues(rows)
-
-	if err != nil {
-		return nil, err
-	}
-
+	fmt.Println(stats, " stats")
 	return stats, nil
-}
-
-func (d *Db) WriteStatistics(results struct{}) (int64, error) {
-
-	cols, err := d.getColumns(false)
-	if err != nil {
-		return 0, err
-	}
-	res := []interface{}{}
-
-	for _, val := range results {
-		res = append(res, reflect.ValueOf(val))
-	}
-
-	result, err := d.db.Exec("insert into statistics (?) values (?)", cols, res)
-
-	if err != nil {
-		return 0, err
-	}
-
-	id, err := result.LastInsertId()
-
-	if err != nil {
-		return 0, err
-	}
-	return id, nil
 }
 
 type RowsResult interface {
 	[][]string
 }
 
-func parseValues[T RowsResult](rows *sql.Rows) ([]map[string]string, error) {
-	var results T
-	var columns []interface{}
-	cols, err := rows.Columns()
+func (d *Db) WriteStatistics(stats interface{}) (int64, error) {
+	tx := d.db.MustBegin()
+
+	res, err := tx.NamedExec(`INSERT INTO statistics (age_min, age_max, salary, race, height, is_married, ip, date_created) VALUES (:age_min, :age_max,
+        :salary, :race, :height, :is_married, :ip, now())`, stats)
 
 	if err != nil {
-		return nil, err
+		fmt.Println(err, " some error")
+		return 0.00, err
 	}
 
-	for range cols {
-		columns = append(columns, new(string))
+	id, err := res.LastInsertId()
+
+	if err != nil {
+		fmt.Println(err, " some error")
+		return 0.00, err
 	}
 
-	for rows.Next() {
-		var result []string
-		err := rows.Scan(columns...)
+	errN := tx.Commit()
 
-		if err != nil {
-			return nil, fmt.Errorf("scan result error:%s", err)
-		}
-
-		for _, val := range columns {
-			strVal := *val.(*string)
-			result = append(result, strVal)
-		}
-		results = append(results, result)
+	if errN != nil {
+		return 0.00, errN
 	}
 
-	mapResults := make([]map[string]string, len(results))
-
-	for _, rowResult := range results {
-		temp := map[string]string{}
-
-		for index, val := range rowResult {
-			temp[cols[index]] = val
-		}
-
-		mapResults = append(mapResults, temp)
-		temp = nil
-	}
-
-	return mapResults, nil
+	return id, nil
 }

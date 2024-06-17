@@ -5,11 +5,10 @@ import (
 	"delulu/pkg/db"
 	"errors"
 	"fmt"
+	"github.com/labstack/echo/v4"
 	"html/template"
 	"math/rand"
 	"strconv"
-
-	"github.com/labstack/echo/v4"
 )
 
 var raceMap = map[string]string{
@@ -135,7 +134,46 @@ func (this *Handlers) Result(c echo.Context) error {
 	}
 	db := db.Db{}
 	db.Connect()
-	db.WriteStatistics(formResults)
+	scheme := c.Request().URL.Scheme
+	ip := c.Request().RequestURI
+	server := c.Request().Header.Get("remote_ip")
+
+	fmt.Println(ip, server, " origin", c.Request().Header.Get("X-FORWARDED-FOR"), scheme)
+	stats, err := db.GetStatistics()
+	fmt.Println(stats, " stats")
+
+	if err != nil {
+		fmt.Println(err, " error")
+		return err
+	}
+
+	id, err := db.WriteStatistics(
+		struct {
+			AgeMin      int    `db:"age_min"`
+			AgeMax      int    `db:"age_max"`
+			Salary      int    `db:"salary"`
+			Race        string `db:"race"`
+			Height      int    `db:"height"`
+			IsMarried   bool   `db:"is_married"`
+			Ip          string `db:"ip"`
+		}{
+			AgeMin:      minAge,
+			AgeMax:      maxAge,
+			Salary:      money,
+			Race:        race,
+			Height:      height,
+			IsMarried:   isMarried,
+			Ip:          c.RealIP(),
+		},
+	)
+
+	fmt.Println(id, " :id")
+
+	if err != nil {
+		fmt.Println(err, " error")
+		return err
+	}
+
 	c.Render(200, "index", formResults)
 	return nil
 }

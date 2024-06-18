@@ -66,13 +66,19 @@ function initFeedbackForm() {
     const feedback = document.querySelector('.js-result__feedback')
     const form = document.querySelector('.js-feedback__form')
     const toggleClass = "feedback__form--active"
+
     if (!form && !feedback) return;
+
     feedback.addEventListener('click', () => {
         form.classList.toggle(toggleClass)
+        window.scrollTo({
+            top: form.offsetTop,
+            behavior: 'smooth'
+        })
     })
     const curseWords = ["хуй", "пизда", "чмо", "жопа", "член"];
+
     document.body.addEventListener('htmx:afterSettle', function(evt) {
-        console.log(evt.detail.requestConfig.triggeringEvent.explicitOriginalTarget[1])
         curseWords.forEach(word => {
             if (evt.detail.requestConfig.triggeringEvent.explicitOriginalTarget[1].value.includes(word)) {
                 evt.originalTarget.textContent += " Даже если вы наговорили гадостей, не мне вас судить."

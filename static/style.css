@@ -388,3 +388,54 @@ code {
 .resources__remark {
     color: #00000042;
 }
+.resources__title {
+      color: var(--textBlue);
+    margin-top: 1.5rem;
+}
+.resources__title {
+    margin-bottom: 1.5rem;
+}
+.resources__age , .resources__race {
+    min-width: 90px;
+    max-width: 100px;
+    display: inline-block;
+}
+.resources__race {
+    min-width: 380px;
+}
+.resources__age-list, .resources__race-list {
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+    margin-top: 1.5rem;
+}
+
+.resources__sphere-details th {
+    width:100%;
+    background-color: #0000ff24;
+    padding: 15px 0;
+    border-radius: 8px;
+}
+
+.resources__sphere-salary-item {
+    text-align: center;
+}
+.resources__sphere-age-item {
+    text-align: center;
+}
+.resources__sphere-table tr {
+    margin-top: 1rem;
+}
+.
+.resources__sphere-table tr:first-child {
+    margin-top: 0;
+}
+.resources__sphere-table {
+    border-spacing: 30px;
+}
+.resources__sphere-salary--header, .resources__sphere-age--header {
+    text-align:left;
+}
+.resources__sphere-details th:first-letter, .resources__sphere-salary--header:first-letter, .resources__sphere-age--header:first-letter, th:first-letter {
+    text-transform: uppercase;
+}

@@ -33,6 +33,31 @@ type Db struct {
 	cols            []string
 }
 
+var schema = `
+CREATE TABLE statistics (
+    id int auto_increment primary key,
+    age_min varchar(255),
+    age_max varchar(255),
+    salary varchar(255),
+    race varchar(255),
+    height int,
+    is_married tinyint(1),
+    ip varchar(255),
+    date_created date
+);
+
+CREATE TABLE feedback (
+    id int auto_increment primary key,
+    name varchar(255),
+    description varchar(255),
+    email varchar(255)
+);
+
+CREATE TABLE unique_ips_temp (
+    id int auto_increment primary key,
+    ip varchar(15),
+    date_created date
+)`
 func (d *Db) Connect() *sqlx.DB {
 	if err := env.Load("./.env.local"); err != nil {
 		panic(err)
@@ -50,6 +75,7 @@ func (d *Db) Connect() *sqlx.DB {
 		log.Fatalln(err)
 	}
 
+	db.MustExec(schema)
 	d.db = db
 
 	return db
@@ -97,7 +123,7 @@ func (d *Db) WriteStatistics(stats interface{}) (int64, error) {
 
 func (d *Db) WriteFeedback(feedback interface{}) (int64, error) {
 	id, err := d.Write("feedback", []string{"name", "description", "email"}, feedback)
-    fmt.Println(id, " feedback id")
+	fmt.Println(id, " feedback id")
 	if err != nil {
 		return 0, err
 	}
@@ -115,7 +141,7 @@ func (d *Db) Write(table string, cols []string, feedback interface{}) (int64, er
 
 	query := fmt.Sprintf("insert into %s (%s) values (%s)", table, strings.Join(cols, ", "), strings.Join(vals, ", "))
 
-    fmt.Println(query, " query")
+	fmt.Println(query, " query")
 	res, err := tx.NamedExec(query, feedback)
 
 	if err != nil {

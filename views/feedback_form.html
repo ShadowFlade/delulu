@@ -1,0 +1,28 @@
+{{ block "feedback__form" . }}
+<div class="result__feedback-outer js-result__feedback-outer">
+    <p class="result__feedback js-result__feedback">
+        Если у вас есть какие-то предложения по поводу проекта, можете оставить свой отзыв
+    </p>
+    <form hx-swap="outerHTML" hx-post="/feedback" hx-target=".js-result__feedback-outer" action="/feedback"
+        class="feedback__form js-feedback__form" method="POST">
+        <div class="feedback__container">
+            <label for="" class="feedback__label">
+                Ваше имя<span class="required"> *</span>
+                <input placeholder="Захааааааааар!!!" type="text" name="name" class="feedback__input" required>
+            </label>
+            <label for="" class="feedback__label" required>
+                Комментарий / пожелание<span class="required"> *</span>
+                <textarea
+                    placeholder="Отлично, я отправил это всем своим подругам. Правда, теперь у меня больше нет подруг. Спасибо тебе!"
+                    name="description" class="feedback__input feedback__input--description"></textarea>
+            </label>
+            <label for="" class="feedback__label">
+                Почта
+                <input placeholder="put1n@sobaka.ru" name="email" type="email" class="feedback__input">
+            </label>
+
+            <button type="submit" class="feedback__submit">Отправить</button>
+        </div>
+    </form>
+</div>
+{{ end }}

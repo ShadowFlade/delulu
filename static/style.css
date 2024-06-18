@@ -38,6 +38,9 @@ code {
     background-color: rgba(220, 224, 228, 0.1) !important;
 }
 
+.required {
+    color:red;
+}
 .main-image {
     width: 550px;
 }
@@ -317,6 +320,9 @@ code {
     margin-top: 2rem;
 }
 
+.result {
+    padding-bottom:10rem;
+}
 .result__list {
     display: flex;
     flex-direction: column;
@@ -438,4 +444,58 @@ code {
 }
 .resources__sphere-details th:first-letter, .resources__sphere-salary--header:first-letter, .resources__sphere-age--header:first-letter, th:first-letter {
     text-transform: uppercase;
+}
+
+
+
+/* ------------------- FEEDBACK ---------------------- */
+.feedback__form {
+    display: none;
+    opacity: 0;
+    translate: 0 25vh;
+    transition-property:  display ;
+    transition-duration: 1s;
+    transition-behavior: allow-discrete;
+}
+.feedback__form--active {
+    display: block;
+    translate: 0 0;
+    opacity: 1;
+    @starting-style {
+        opacity:0;
+    }
+}
+.feedback__container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    background-color: rgb(225, 91, 178);
+    padding: 1.5rem;
+    border-radius: 8px;
+    gap: 2rem;
+}
+.feedback__input {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.3rem .5rem;
+    border-radius: 4px;
+}
+.feedback__input--description {
+    width: 100%;
+}
+.feedback__submit {
+    max-width: 300px;
+    padding: .3rem .5rem;
+    border-radius: 4px;
+    margin-right: auto;
+    background-color: #51dcff;
+}
+.feedback-result__container {
+    padding:1.5rem;
+    background-color: rgb(225, 91, 178);
+    border-radius: 16px;
+}
+.feedback__result {
+    line-height: 1.8;
 }

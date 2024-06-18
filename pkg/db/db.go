@@ -2,10 +2,12 @@ package db
 
 import (
 	"fmt"
+	"log"
+	"strings"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofor-little/env"
 	"github.com/jmoiron/sqlx"
-	"log"
 )
 
 type IStatistics struct {
@@ -73,6 +75,48 @@ func (d *Db) WriteStatistics(stats interface{}) (int64, error) {
 
 	res, err := tx.NamedExec(`INSERT INTO statistics (age_min, age_max, salary, race, height, is_married, ip, date_created) VALUES (:age_min, :age_max,
         :salary, :race, :height, :is_married, :ip, now())`, stats)
+
+	if err != nil {
+		return 0.00, err
+	}
+
+	id, err := res.LastInsertId()
+
+	if err != nil {
+		return 0.00, err
+	}
+
+	errN := tx.Commit()
+
+	if errN != nil {
+		return 0.00, errN
+	}
+
+	return id, nil
+}
+
+func (d *Db) WriteFeedback(feedback interface{}) (int64, error) {
+	id, err := d.Write("feedback", []string{"name", "description", "email"}, feedback)
+    fmt.Println(id, " feedback id")
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+}
+
+func (d *Db) Write(table string, cols []string, feedback interface{}) (int64, error) {
+
+	tx := d.db.MustBegin()
+	vals := make([]string, 0, len(cols))
+
+	for _, val := range cols {
+		vals = append(vals, ":"+val)
+	}
+
+	query := fmt.Sprintf("insert into %s (%s) values (%s)", table, strings.Join(cols, ", "), strings.Join(vals, ", "))
+
+    fmt.Println(query, " query")
+	res, err := tx.NamedExec(query, feedback)
 
 	if err != nil {
 		return 0.00, err

@@ -26,7 +26,6 @@ func newTemplate() *Templates {
 
 type Page struct{}
 
-
 func newPage() Page {
 	return Page{}
 }
@@ -65,5 +64,6 @@ func main() {
 		return nil
 	})
 
+	e.POST("/"+pkg.Pages.FEEDBACK, handlers.Feedback)
 	e.Logger.Fatal(e.Start(":42069"))
 }

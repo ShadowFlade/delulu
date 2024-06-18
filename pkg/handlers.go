@@ -62,33 +62,32 @@ func (this *Handlers) Result(c echo.Context) error {
 	var img string
 	var text string
 
-	fmt.Println(chance, " chance")
-
-	if chance <= 1 {
+	if chance <= 5 {
 		score = 0
 		imgs := []string{"587222.jpg", "975757.webp"}
 		img = imgs[rand.Intn(len(imgs))]
 		text = "Вам не место на этой планете"
-	} else if chance <= 5 { // hold your horses lady
+	} else if chance <= 25 {
 		score = 1
 		img = "2.jpg"
-	} else if chance <= 15 { // are you a feminist?
+		text = "Поздравляю, у вас феминизм!"
+	} else if chance <= 45 {
 		score = 2
 		imgs := []string{"3.jpg", "3_1.jpg"}
 		img = imgs[rand.Intn(len(imgs))]
-	} else if chance <= 40 { // potential catlady
+		text = "Думаю, даже кошки вас уже не примут"
+	} else if chance <= 65 {
 		score = 3
 		img = "4.jpg"
-
-	} else if chance <= 65 { // down to earth
+		text = "Потенциально хорошая жена"
+	} else if chance <= 90 {
 		score = 4
 		img = "5.jpg"
-	} else if chance <= 95 { // tradwife material
+		text = "Отличная жена и домохозяйка. Оставьте свой номер, с вами свяжутся"
+	} else if chance > 90 {
 		score = 5
 		img = "6.jpg"
-
-	} else if chance > 95 { // probably not a woman
-		score = 6
+		text = "А вы точно женщина?"
 	}
 
 	list := make([]template.HTML, 0)
@@ -149,21 +148,21 @@ func (this *Handlers) Result(c echo.Context) error {
 
 	id, err := db.WriteStatistics(
 		struct {
-			AgeMin      int    `db:"age_min"`
-			AgeMax      int    `db:"age_max"`
-			Salary      int    `db:"salary"`
-			Race        string `db:"race"`
-			Height      int    `db:"height"`
-			IsMarried   bool   `db:"is_married"`
-			Ip          string `db:"ip"`
+			AgeMin    int    `db:"age_min"`
+			AgeMax    int    `db:"age_max"`
+			Salary    int    `db:"salary"`
+			Race      string `db:"race"`
+			Height    int    `db:"height"`
+			IsMarried bool   `db:"is_married"`
+			Ip        string `db:"ip"`
 		}{
-			AgeMin:      minAge,
-			AgeMax:      maxAge,
-			Salary:      money,
-			Race:        race,
-			Height:      height,
-			IsMarried:   isMarried,
-			Ip:          c.RealIP(),
+			AgeMin:    minAge,
+			AgeMax:    maxAge,
+			Salary:    money,
+			Race:      race,
+			Height:    height,
+			IsMarried: isMarried,
+			Ip:        c.RealIP(),
 		},
 	)
 
@@ -176,4 +175,30 @@ func (this *Handlers) Result(c echo.Context) error {
 
 	c.Render(200, "index", formResults)
 	return nil
+}
+
+func (this *Handlers) Feedback(c echo.Context) error {
+	name := c.Request().PostFormValue("name")
+	description := c.Request().PostFormValue("description")
+	email := c.Request().PostFormValue("email")
+	db := db.Db{}
+	db.Connect()
+	_, err := db.WriteFeedback(struct {
+		Name        string `db:"name"`
+		Description string `db:"description"`
+		Email       string `db:"email"`
+	}{
+		Name:        name,
+		Description: description,
+		Email:       email,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	c.Render(200, "form__feedback-result", nil)
+
+	return nil
+
 }

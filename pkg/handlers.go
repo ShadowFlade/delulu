@@ -41,7 +41,8 @@ func (this *Handlers) Result(c echo.Context) error {
 	race := c.QueryParam("race")
 	height, heightOk := strconv.Atoi(c.QueryParam("height"))
 	money, moneyOk := strconv.Atoi(c.QueryParam("money"))
-	isMarried, _ := strconv.ParseBool(c.QueryParam("married"))
+	excludeMarriedStr := c.QueryParam("married")
+	excludeMarried := excludeMarriedStr == "on"
 
 	if moneyOk != nil {
 		return errors.New("Money is missing")
@@ -56,7 +57,7 @@ func (this *Handlers) Result(c echo.Context) error {
 		return errors.New("maxAgeErr is missing")
 	}
 
-	chance := data.Stats.CalcChance(minAge, maxAge, race, height, money, isMarried) * 100
+	chance := data.Stats.CalcChance(minAge, maxAge, race, height, money, excludeMarried) * 100
 
 	var score int
 	var img string
@@ -67,11 +68,11 @@ func (this *Handlers) Result(c echo.Context) error {
 		imgs := []string{"587222.jpg", "975757.webp"}
 		img = imgs[rand.Intn(len(imgs))]
 		text = "Вам не место на этой планете"
-	} else if chance <= 25 {
+	} else if chance <= 15 {
 		score = 1
 		img = "2.jpg"
 		text = "Поздравляю, у вас феминизм!"
-	} else if chance <= 45 {
+	} else if chance <= 30 {
 		score = 2
 		imgs := []string{"3.jpg", "3_1.jpg"}
 		img = imgs[rand.Intn(len(imgs))]
@@ -123,7 +124,7 @@ func (this *Handlers) Result(c echo.Context) error {
 		list = append(list, template.HTML("Любой заработок"))
 	}
 
-	if isMarried {
+	if excludeMarried {
 		list = append(list, "Должен быть <span class='answer'>не женат</span>")
 	} else {
 		list = append(list, "Семейное положение <span class='answer'>не важно</span>")
@@ -131,7 +132,7 @@ func (this *Handlers) Result(c echo.Context) error {
 
 	formResults := FormResults{
 		List:      list,
-		IsMarried: isMarried,
+		IsMarried: excludeMarried,
 		Chance:    chance,
 		Score:     score,
 		Img:       img,
@@ -141,7 +142,7 @@ func (this *Handlers) Result(c echo.Context) error {
 	db := db.Db{}
 	db.Connect()
 
-	id, err := db.WriteStatistics(
+	_, err := db.WriteStatistics(
 		struct {
 			AgeMin    int    `db:"age_min"`
 			AgeMax    int    `db:"age_max"`
@@ -156,15 +157,12 @@ func (this *Handlers) Result(c echo.Context) error {
 			Salary:    money,
 			Race:      race,
 			Height:    height,
-			IsMarried: isMarried,
+			IsMarried: excludeMarried,
 			Ip:        c.RealIP(),
 		},
 	)
 
-	fmt.Println(id, " :id")
-
 	if err != nil {
-		fmt.Println(err, " error")
 		return err
 	}
 

@@ -97,7 +97,6 @@ func (d *Db) WriteStatistics(stats interface{}) (int64, error) {
 
 func (d *Db) WriteFeedback(feedback interface{}) (int64, error) {
 	id, err := d.Write("feedback", []string{"name", "description", "email"}, feedback)
-	fmt.Println(id, " feedback id")
 	if err != nil {
 		return 0, err
 	}
@@ -115,7 +114,6 @@ func (d *Db) Write(table string, cols []string, feedback interface{}) (int64, er
 
 	query := fmt.Sprintf("insert into %s (%s) values (%s)", table, strings.Join(cols, ", "), strings.Join(vals, ", "))
 
-	fmt.Println(query, " query")
 	res, err := tx.NamedExec(query, feedback)
 
 	if err != nil {

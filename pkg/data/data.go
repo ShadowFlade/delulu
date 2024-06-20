@@ -12,7 +12,7 @@ type HeightMap map[float32]float32
 type IStats struct {
 	Total   int
 	Age     AgeMap
-	Married int
+	Married float32
 	Race    map[string]float32
 	Height  map[float32]float32
 	Salary  ISphere
@@ -42,7 +42,7 @@ var Stats = IStats{
 		"50 - 54": 4179,
 		"55 - 59": 4621,
 	},
-	Married: 63,
+	Married: 0.63,
 	Race: map[string]float32{
 		"slavs":        91.00,
 		"middle_asian": 2.00,
@@ -385,6 +385,8 @@ func (s *IStats) calcAvgSalaryPerAge(age int) (float64, float64) {
 	var count int
 	var manSalaryMultiplier = 1.15 //there is stats about ppl in general, mens salary a bit higher
 	maxSalary := 0
+
+    //iterating over spheres
 	for _, v := range s.Salary {
 		isSalaryChanging := (v.Salary.Mid - v.Salary.End) > 0
 		isShouldSalaryRise := age > v.Age.Start && age <= v.Age.Mid
@@ -412,30 +414,26 @@ func (s *IStats) calcAvgSalaryPerAge(age int) (float64, float64) {
 		count += 1
 	}
 	avgSalary := (float64(salary) * manSalaryMultiplier) / float64(count)
+
 	return avgSalary * 1000, float64(maxSalary) * manSalaryMultiplier
 }
 
 func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, money int, excludeMarried bool) float32 {
 	var marriedChance float32
-	if excludeMarried {
-		marriedChance = .37
-	} else {
-		marriedChance = .63
-	}
 
 	heightChance := s.calcHeightChance(float32(height))
 	ageChance := float32(s.calcAgeChance(float32(minAge), float32(maxAge)))
 	salaryChance := s.calcSalaryChance(money)
 	raceChance := s.Race[race] / 100
+
 	if excludeMarried {
 		marriedChance = 1 - float32(s.Married)
 	} else {
 		marriedChance = 1
 	}
-	fmt.Println(heightChance, " height", ageChance, " age", marriedChance, " married", salaryChance, " salary", raceChance, " race", " chanced")
+
 	chance := heightChance * ageChance * marriedChance * salaryChance * raceChance
 	chance = float32(int(chance*1000)) / 1000
-	fmt.Println(heightChance, ageChance, salaryChance, raceChance, "fmt")
 	return chance
 }
 
@@ -456,7 +454,6 @@ func (s *IStats) calcSalaryChance(desiredSalary int) float32 {
 		for i := ageMin; i <= ageMax; i++ {
 			avgSalaryTemp, maxSalaryTemp := s.calcAvgSalaryPerAge(i)
 			avgSalary = avgSalaryTemp
-
 			if maxSalaryTemp > maxSalary {
 				maxSalary = maxSalaryTemp
 			}
@@ -518,6 +515,5 @@ func (s *IStats) calcHeightChance(height float32) float32 {
 			heightPerc += heightChance
 		}
 	}
-	fmt.Println(heightPerc, " height chance")
 	return heightPerc / 100
 }

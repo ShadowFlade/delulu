@@ -48,6 +48,7 @@ var Stats = IStats{
 		"middle_asian": 2.00,
 		"exotic":       0.0000034,
 		"other":        6.00,
+		"any":          100,
 	},
 	Height: HeightMap{
 		165.00: 0.14827,
@@ -440,10 +441,10 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 
 func (s *IStats) calcSalaryChance(desiredSalary int) float32 {
 
+	veryHighSalaryChance := 0.005 //this is uncalculated for, maybe will find stats later for men with salary >500k
 	var totalPeople int
 	var pplWithDesiredMoney float32
 	var chance float32
-	veryHighSalaryChance := 0.005 //this is uncalculated for, maybe will find stats later for men with salary >500k
 	var avgSalary float64
 	var maxSalary float64
 	for age, ppl := range s.Age {
@@ -455,6 +456,7 @@ func (s *IStats) calcSalaryChance(desiredSalary int) float32 {
 		for i := ageMin; i <= ageMax; i++ {
 			avgSalaryTemp, maxSalaryTemp := s.calcAvgSalaryPerAge(i)
 			avgSalary = avgSalaryTemp
+
 			if maxSalaryTemp > maxSalary {
 				maxSalary = maxSalaryTemp
 			}
@@ -463,6 +465,8 @@ func (s *IStats) calcSalaryChance(desiredSalary int) float32 {
 			}
 			totalPeople += int(pplPerAge)
 		}
+
+		// wtf is this
 		if float64(avgSalary) >= veryHighSalaryChance {
 			chance += float32(veryHighSalaryChance)
 		}
@@ -487,16 +491,16 @@ func (s *IStats) calcAgeChance(minAge, maxAge float32) float32 {
 		maxAgeData, maxOk := strconv.Atoi(string(ageSplit[1]))
 		totalPeople += count
 		if minOk == nil && maxOk == nil && ((float32(minAgeData) >= minAge && maxAge >= float32(minAgeData)) || (maxAge >= float32(maxAgeData) && minAge <= float32(maxAgeData))) {
-			fmt.Println(minAge, maxAge, " min age max age")
-			fmt.Println(minAgeData, maxAgeData, " minagedata maxagedata")
-			fmt.Println(minAge >= float32(minAgeData), " min age >= minAgeData")
-			fmt.Println(minAge <= float32(maxAgeData), " min age <= maxAgedata")
-			fmt.Println("----", (minAge >= float32(minAgeData) && minAge <= float32(maxAgeData)))
-			fmt.Println(maxAge >= float32(minAgeData), " max age >= minAgeData")
-			fmt.Println(maxAge <= float32(maxAgeData), " max age <= maxAgeData")
-			fmt.Println("---", (maxAge >= float32(minAgeData) && maxAge <= float32(maxAgeData)))
-			fmt.Println("result :", (minAge >= float32(minAgeData) && minAge <= float32(maxAgeData)) || (maxAge <= float32(maxAgeData) || maxAge >= float32(minAgeData)))
-			fmt.Println("-----------------------------------------------------")
+			//fmt.Println(minAge, maxAge, " min age max age")
+			//fmt.Println(minAgeData, maxAgeData, " minagedata maxagedata")
+			//fmt.Println(minAge >= float32(minAgeData), " min age >= minAgeData")
+			//fmt.Println(minAge <= float32(maxAgeData), " min age <= maxAgedata")
+			//fmt.Println("----", (minAge >= float32(minAgeData) && minAge <= float32(maxAgeData)))
+			//fmt.Println(maxAge >= float32(minAgeData), " max age >= minAgeData")
+			//fmt.Println(maxAge <= float32(maxAgeData), " max age <= maxAgeData")
+			//fmt.Println("---", (maxAge >= float32(minAgeData) && maxAge <= float32(maxAgeData)))
+			//fmt.Println("result :", (minAge >= float32(minAgeData) && minAge <= float32(maxAgeData)) || (maxAge <= float32(maxAgeData) || maxAge >= float32(minAgeData)))
+			//fmt.Println("-----------------------------------------------------")
 			peopleInChance += count
 		}
 	}

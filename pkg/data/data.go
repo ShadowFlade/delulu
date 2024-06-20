@@ -41,9 +41,6 @@ var Stats = IStats{
 		"45 - 49": 4690,
 		"50 - 54": 4179,
 		"55 - 59": 4621,
-		"60 - 64": 4345,
-		"65 - 69": 3218,
-		"70 - +":  4480,
 	},
 	Married: 63,
 	Race: map[string]float32{
@@ -434,6 +431,7 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 	} else {
 		marriedChance = 1
 	}
+	fmt.Println(heightChance, " height", ageChance, " age", marriedChance, " married", salaryChance, " salary", raceChance, " race", " chanced")
 	chance := heightChance * ageChance * marriedChance * salaryChance * raceChance
 	chance = float32(int(chance*1000)) / 1000
 	fmt.Println(heightChance, ageChance, salaryChance, raceChance, "fmt")
@@ -485,10 +483,20 @@ func (s *IStats) calcAgeChance(minAge, maxAge float32) float32 {
 
 	for ageRange, count := range s.Age {
 		ageSplit := strings.Split(ageRange, " - ")
-		min, minOk := strconv.Atoi(string(ageSplit[0]))
-		max, maxOk := strconv.Atoi(string(ageSplit[1]))
+		minAgeData, minOk := strconv.Atoi(string(ageSplit[0]))
+		maxAgeData, maxOk := strconv.Atoi(string(ageSplit[1]))
 		totalPeople += count
-		if minOk == nil && maxOk == nil && (minAge >= float32(min) && minAge <= float32(max)) || (maxAge <= float32(max) || maxAge >= float32(min)) {
+		if minOk == nil && maxOk == nil && ((float32(minAgeData) >= minAge && maxAge >= float32(minAgeData)) || (maxAge >= float32(maxAgeData) && minAge <= float32(maxAgeData))) {
+			fmt.Println(minAge, maxAge, " min age max age")
+			fmt.Println(minAgeData, maxAgeData, " minagedata maxagedata")
+			fmt.Println(minAge >= float32(minAgeData), " min age >= minAgeData")
+			fmt.Println(minAge <= float32(maxAgeData), " min age <= maxAgedata")
+			fmt.Println("----", (minAge >= float32(minAgeData) && minAge <= float32(maxAgeData)))
+			fmt.Println(maxAge >= float32(minAgeData), " max age >= minAgeData")
+			fmt.Println(maxAge <= float32(maxAgeData), " max age <= maxAgeData")
+			fmt.Println("---", (maxAge >= float32(minAgeData) && maxAge <= float32(maxAgeData)))
+			fmt.Println("result :", (minAge >= float32(minAgeData) && minAge <= float32(maxAgeData)) || (maxAge <= float32(maxAgeData) || maxAge >= float32(minAgeData)))
+			fmt.Println("-----------------------------------------------------")
 			peopleInChance += count
 		}
 	}

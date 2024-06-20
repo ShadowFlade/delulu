@@ -36,7 +36,7 @@ function initSliders() {
         rangeLabelEl.dataset.ratio = ratio.toFixed(2);
 
         rangeEl.addEventListener('input', function() {
-            const translate = calcTooltipTranslate(rangeEl, rangeLabelEl);
+            calcTooltipTranslate(rangeEl, rangeLabelEl);
         });
     });
 }
@@ -71,10 +71,12 @@ function initFeedbackForm() {
 
     feedback.addEventListener('click', () => {
         form.classList.toggle(toggleClass)
-        window.scrollTo({
-            top: form.offsetTop,
-            behavior: 'smooth'
-        })
+        if (form.classList.contains(toggleClass)) {
+            window.scrollTo({
+                top: form.offsetTop,
+                behavior: 'smooth'
+            })
+        }
     })
     const curseWords = ["хуй", "пизда", "чмо", "жопа", "член"];
 
@@ -86,3 +88,4 @@ function initFeedbackForm() {
         })
     });
 }
+

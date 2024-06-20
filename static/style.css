@@ -353,6 +353,9 @@ code {
     margin-top: 2rem;
 }
 
+.result__feedback {
+    text-decoration: underline;
+}
 .result__new {
     margin-top: 2rem;
     display: block;
@@ -499,3 +502,4 @@ code {
 .feedback__result {
     line-height: 1.8;
 }
+

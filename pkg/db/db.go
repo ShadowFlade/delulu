@@ -33,31 +33,6 @@ type Db struct {
 	cols            []string
 }
 
-var schema = `
-CREATE TABLE statistics (
-    id int auto_increment primary key,
-    age_min varchar(255),
-    age_max varchar(255),
-    salary varchar(255),
-    race varchar(255),
-    height int,
-    is_married tinyint(1),
-    ip varchar(255),
-    date_created date
-);
-
-CREATE TABLE feedback (
-    id int auto_increment primary key,
-    name varchar(255),
-    description varchar(255),
-    email varchar(255)
-);
-
-CREATE TABLE unique_ips_temp (
-    id int auto_increment primary key,
-    ip varchar(15),
-    date_created date
-)`
 func (d *Db) Connect() *sqlx.DB {
 	if err := env.Load("./.env.local"); err != nil {
 		panic(err)
@@ -75,7 +50,6 @@ func (d *Db) Connect() *sqlx.DB {
 		log.Fatalln(err)
 	}
 
-	db.MustExec(schema)
 	d.db = db
 
 	return db

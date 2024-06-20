@@ -111,7 +111,14 @@ func (this *Handlers) Result(c echo.Context) error {
 	}
 
 	if moneyOk == nil {
-		list = append(list, template.HTML("Должен зарабатывать как минимум <span class='answer'>"+fmt.Sprint(money/1000)+"т.р.</span> "))
+		shouldEarn := money / 1000
+		var shouldEarnStr string
+		if shouldEarn != 0 {
+			shouldEarnStr = fmt.Sprintf("Должен зарабатывать как минимум <span class='answer'>" + fmt.Sprint(shouldEarn) + "т.р.</span> ")
+		} else {
+			shouldEarnStr = fmt.Sprintf("Может зарабатывать <span class='answer'>любую сумму.</span> ")
+		}
+		list = append(list, template.HTML(shouldEarnStr))
 	} else {
 		list = append(list, template.HTML("Любой заработок"))
 	}
@@ -133,18 +140,6 @@ func (this *Handlers) Result(c echo.Context) error {
 	}
 	db := db.Db{}
 	db.Connect()
-	scheme := c.Request().URL.Scheme
-	ip := c.Request().RequestURI
-	server := c.Request().Header.Get("remote_ip")
-
-	fmt.Println(ip, server, " origin", c.Request().Header.Get("X-FORWARDED-FOR"), scheme)
-	stats, err := db.GetStatistics()
-	fmt.Println(stats, " stats")
-
-	if err != nil {
-		fmt.Println(err, " error")
-		return err
-	}
 
 	id, err := db.WriteStatistics(
 		struct {

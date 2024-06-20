@@ -38,6 +38,8 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Renderer = newTemplate()
 	e.Static("/static", "static")
+	e.File("/toolcool-range-slider.min.js", "node_modules/toolcool-range-slider/dist/toolcool-range-slider.min.js")
+	e.File("/tcrs-moving-tooltip.min.js", "node_modules/toolcool-range-slider/dist/plugins/tcrs-moving-tooltip.min.js")
 	handlers := pkg.Handlers{}
 
 	e.GET("/", func(c echo.Context) error {

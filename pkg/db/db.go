@@ -3,6 +3,8 @@ package db
 import (
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -34,7 +36,13 @@ type Db struct {
 }
 
 func (d *Db) Connect() *sqlx.DB {
-	if err := env.Load("./.env.local"); err != nil {
+    ex, err := os.Executable();
+      if err != nil {
+        panic(err)
+    }
+    exPath := filepath.Dir(ex)
+    fmt.Println(exPath)
+	if err := env.Load("./.env"); err != nil {
 		panic(err)
 	}
 	d.ipsTable = env.Get("DB_IPS_TABLE", "mom")

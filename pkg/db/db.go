@@ -167,7 +167,7 @@ func (d *Db) checkAndCreateNewStructure(db sqlx.DB) (bool, error) {
 
 	fmt.Println(tableCount, " table count")
 	if tableCount == 0 {
-		splitFileIntoFilesByEmptyString("./create_tables.sql")
+		execMultipleSqlStatementsFile("./create_tables.sql", db)
 		// _, err = sqlx.LoadFile(db, "./create_tables.sql")
 
 		if err != nil {
@@ -184,17 +184,42 @@ func (d *Db) checkAndCreateNewStructure(db sqlx.DB) (bool, error) {
 
 func check(e error) {
 	if e != nil {
+		fmt.Println(e)
+        e.Error()
 		panic(e)
 	}
 }
-func splitFileIntoFilesByEmptyString(filename string) {
+func execMultipleSqlStatementsFile(filename string, db sqlx.DB) {
 	fmt.Println("starting splitting")
 	//determine if there are multiple sql statements in a file (by detecting empty lines) and then split this file into multiple files so each one contains one mysql statement and then we exec them one by one
 	data, err := os.ReadFile(filename)
 	check(err)
 	fmt.Print(string(data), " data")
-    splitted := strings.Split(string(data),"\n\n");
-    fmt.Println(splitted[1]," splitted", len(splitted))
+	sqlStatements := strings.Split(string(data), "\n\n")
+	files := make([]os.File, len(sqlStatements))
+
+	fmt.Println(sqlStatements, " sql statements")
+
+	for index, sqlStatement := range sqlStatements {
+		file, err := os.Create("sql.tmp" + fmt.Sprint(index) + ".sql")
+		fmt.Println(file, " file")
+		check(err)
+		file.WriteString(sqlStatement)
+		files = append(files, *file)
+	}
+
+	for _, file := range files {
+		// var fileStr []byte
+		// file.Read(fileStr)
+		// check(err)
+        stat, err := file.Stat()
+        check(err);
+        fmt.Println(stat," file stat")
+		fmt.Println(file.Name(), " file name")
+		_, err = sqlx.LoadFile(db, file.Name())
+		check(err)
+	}
+
 	//	f, err := os.Open(filename)
 	//	check(err)
 	//

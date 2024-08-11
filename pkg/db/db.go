@@ -36,12 +36,12 @@ type Db struct {
 }
 
 func (d *Db) Connect() *sqlx.DB {
-    ex, err := os.Executable();
-      if err != nil {
-        panic(err)
-    }
-    exPath := filepath.Dir(ex)
-    fmt.Println(exPath)
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+	fmt.Println(exPath)
 	if err := env.Load("./.env"); err != nil {
 		panic(err)
 	}
@@ -54,10 +54,7 @@ func (d *Db) Connect() *sqlx.DB {
 	connectStr := fmt.Sprintf("%s:@(127.0.0.1:3306)/%s", d.login, d.dbName)
 	db, err := sqlx.Connect("mysql", connectStr)
 
-	if err != nil {
-		log.Fatalln(err)
-	}
-
+	d.checkAndCreateNewStructure(*db)
 	d.db = db
 
 	return db
@@ -141,4 +138,71 @@ func (d *Db) Write(table string, cols []string, feedback interface{}) (int64, er
 	}
 
 	return id, nil
+}
+
+func (d *Db) checkAndCreateNewStructure(db sqlx.DB) (bool, error) {
+
+	rows, err := db.Queryx("SELECT table_name FROM information_schema.tables WHERE table_schema = 'delulu'")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Slice to store table names
+	tables := []string{}
+
+	// Iterate over the result set and retrieve table names
+	tableCount := 0
+	for rows.Next() {
+		var tableName string
+		err := rows.Scan(&tableName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(tableName, " table name")
+		tables = append(tables, tableName)
+		tableCount++
+	}
+
+	fmt.Println(tableCount, " table count")
+	if tableCount == 0 {
+		splitFileIntoFilesByEmptyString("./create_tables.sql")
+		// _, err = sqlx.LoadFile(db, "./create_tables.sql")
+
+		if err != nil {
+			fmt.Println("Error loading and executing SQL file:", err)
+		}
+	}
+	// Print the table names
+	for _, table := range tables {
+		fmt.Println(table)
+	}
+	return true, nil
+
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+func splitFileIntoFilesByEmptyString(filename string) {
+	fmt.Println("starting splitting")
+	//determine if there are multiple sql statements in a file (by detecting empty lines) and then split this file into multiple files so each one contains one mysql statement and then we exec them one by one
+	data, err := os.ReadFile(filename)
+	check(err)
+	fmt.Print(string(data), " data")
+    splitted := strings.Split(string(data),"\n\n");
+    fmt.Println(splitted[1]," splitted", len(splitted))
+	//	f, err := os.Open(filename)
+	//	check(err)
+	//
+	//	b1 := make([]byte, 5)
+	//	h1, err := f.Read(b1);
+	//	check(err)
+	//
+	// fmt.Printf("%d byes: %s\n", n1, string(b1[:n1]))
+	//
+	//	o2, err := f.Seek
 }

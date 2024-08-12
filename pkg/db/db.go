@@ -185,7 +185,7 @@ func (d *Db) checkAndCreateNewStructure(db sqlx.DB) (bool, error) {
 func check(e error) {
 	if e != nil {
 		fmt.Println(e)
-        e.Error()
+		e.Error()
 		panic(e)
 	}
 }
@@ -196,26 +196,17 @@ func execMultipleSqlStatementsFile(filename string, db sqlx.DB) {
 	check(err)
 	fmt.Print(string(data), " data")
 	sqlStatements := strings.Split(string(data), "\n\n")
-	files := make([]os.File, len(sqlStatements))
-
-	fmt.Println(sqlStatements, " sql statements")
+	files := make([]os.File, 0)
 
 	for index, sqlStatement := range sqlStatements {
 		file, err := os.Create("sql.tmp" + fmt.Sprint(index) + ".sql")
-		fmt.Println(file, " file")
 		check(err)
 		file.WriteString(sqlStatement)
 		files = append(files, *file)
 	}
 
 	for _, file := range files {
-		// var fileStr []byte
-		// file.Read(fileStr)
-		// check(err)
-        stat, err := file.Stat()
-        check(err);
-        fmt.Println(stat," file stat")
-		fmt.Println(file.Name(), " file name")
+		check(err)
 		_, err = sqlx.LoadFile(db, file.Name())
 		check(err)
 	}

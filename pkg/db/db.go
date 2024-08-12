@@ -36,12 +36,10 @@ type Db struct {
 }
 
 func (d *Db) Connect() *sqlx.DB {
-	ex, err := os.Executable()
+	_, err := os.Executable()
 	if err != nil {
 		panic(err)
 	}
-	exPath := filepath.Dir(ex)
-	fmt.Println(exPath)
 	if err := env.Load("./.env"); err != nil {
 		panic(err)
 	}
@@ -160,12 +158,10 @@ func (d *Db) checkAndCreateNewStructure(db sqlx.DB) (bool, error) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(tableName, " table name")
 		tables = append(tables, tableName)
 		tableCount++
 	}
 
-	fmt.Println(tableCount, " table count")
 	if tableCount == 0 {
 		execMultipleSqlStatementsFile("./create_tables.sql", db)
 		// _, err = sqlx.LoadFile(db, "./create_tables.sql")
@@ -174,10 +170,6 @@ func (d *Db) checkAndCreateNewStructure(db sqlx.DB) (bool, error) {
 			fmt.Println("Error loading and executing SQL file:", err)
 		}
 	}
-	// Print the table names
-	for _, table := range tables {
-		fmt.Println(table)
-	}
 	return true, nil
 
 }
@@ -185,16 +177,13 @@ func (d *Db) checkAndCreateNewStructure(db sqlx.DB) (bool, error) {
 func check(e error) {
 	if e != nil {
 		fmt.Println(e)
-		e.Error()
 		panic(e)
 	}
 }
 func execMultipleSqlStatementsFile(filename string, db sqlx.DB) {
-	fmt.Println("starting splitting")
 	//determine if there are multiple sql statements in a file (by detecting empty lines) and then split this file into multiple files so each one contains one mysql statement and then we exec them one by one
 	data, err := os.ReadFile(filename)
 	check(err)
-	fmt.Print(string(data), " data")
 	sqlStatements := strings.Split(string(data), "\n\n")
 	files := make([]os.File, 0)
 
@@ -211,14 +200,4 @@ func execMultipleSqlStatementsFile(filename string, db sqlx.DB) {
 		check(err)
 	}
 
-	//	f, err := os.Open(filename)
-	//	check(err)
-	//
-	//	b1 := make([]byte, 5)
-	//	h1, err := f.Read(b1);
-	//	check(err)
-	//
-	// fmt.Printf("%d byes: %s\n", n1, string(b1[:n1]))
-	//
-	//	o2, err := f.Seek
 }

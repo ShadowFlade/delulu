@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS statistics;
 CREATE TABLE statistics (
   id        INT AUTO_INCREMENT NOT NULL,
   age_min	INT	NOT NULL,
@@ -14,7 +13,6 @@ CREATE TABLE statistics (
   PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS unique_ips_temp;
 CREATE TABLE unique_ips_temp (
   id        INT AUTO_INCREMENT NOT NULL,
   ip 		VARCHAR(15) NOT NULL,

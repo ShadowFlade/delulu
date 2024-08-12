@@ -36,12 +36,10 @@ type Db struct {
 }
 
 func (d *Db) Connect() *sqlx.DB {
-    ex, err := os.Executable();
-      if err != nil {
-        panic(err)
-    }
-    exPath := filepath.Dir(ex)
-    fmt.Println(exPath)
+	_, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
 	if err := env.Load("./.env"); err != nil {
 		panic(err)
 	}
@@ -54,10 +52,7 @@ func (d *Db) Connect() *sqlx.DB {
 	connectStr := fmt.Sprintf("%s:@(127.0.0.1:3306)/%s", d.login, d.dbName)
 	db, err := sqlx.Connect("mysql", connectStr)
 
-	if err != nil {
-		log.Fatalln(err)
-	}
-
+	d.checkAndCreateNewStructure(*db)
 	d.db = db
 
 	return db
@@ -141,4 +136,68 @@ func (d *Db) Write(table string, cols []string, feedback interface{}) (int64, er
 	}
 
 	return id, nil
+}
+
+func (d *Db) checkAndCreateNewStructure(db sqlx.DB) (bool, error) {
+
+	rows, err := db.Queryx("SELECT table_name FROM information_schema.tables WHERE table_schema = 'delulu'")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Slice to store table names
+	tables := []string{}
+
+	// Iterate over the result set and retrieve table names
+	tableCount := 0
+	for rows.Next() {
+		var tableName string
+		err := rows.Scan(&tableName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		tables = append(tables, tableName)
+		tableCount++
+	}
+
+	if tableCount == 0 {
+		execMultipleSqlStatementsFile("./create_tables.sql", db)
+		// _, err = sqlx.LoadFile(db, "./create_tables.sql")
+
+		if err != nil {
+			fmt.Println("Error loading and executing SQL file:", err)
+		}
+	}
+	return true, nil
+
+}
+
+func check(e error) {
+	if e != nil {
+		fmt.Println(e)
+		panic(e)
+	}
+}
+func execMultipleSqlStatementsFile(filename string, db sqlx.DB) {
+	//determine if there are multiple sql statements in a file (by detecting empty lines) and then split this file into multiple files so each one contains one mysql statement and then we exec them one by one
+	data, err := os.ReadFile(filename)
+	check(err)
+	sqlStatements := strings.Split(string(data), "\n\n")
+	files := make([]os.File, 0)
+
+	for index, sqlStatement := range sqlStatements {
+		file, err := os.Create("sql.tmp" + fmt.Sprint(index) + ".sql")
+		check(err)
+		file.WriteString(sqlStatement)
+		files = append(files, *file)
+	}
+
+	for _, file := range files {
+		check(err)
+		_, err = sqlx.LoadFile(db, file.Name())
+		check(err)
+	}
+
 }

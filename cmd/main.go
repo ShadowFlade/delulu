@@ -1,12 +1,14 @@
 package main
 
 import (
+	"github.com/gofor-little/env"
 	"delulu/pkg"
 	"delulu/pkg/db"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"html/template"
 	"io"
+    "fmt"
 )
 
 type Templates struct {
@@ -34,6 +36,11 @@ func main() {
 	e := echo.New()
 	db := db.Db{}
 	db.Connect()
+
+	if err := env.Load("./.env"); err != nil {
+		fmt.Println("error")
+		panic(err)
+	}
 
 	e.Use(middleware.Logger())
 	e.Renderer = newTemplate()
@@ -66,6 +73,7 @@ func main() {
 		return nil
 	})
 
+    ipPort := env.Get("IP_PORT",":3000")
 	e.POST("/"+pkg.Pages.FEEDBACK, handlers.Feedback)
-	e.Logger.Fatal(e.Start(":3000"))
+	e.Logger.Fatal(e.Start(ipPort))
 }

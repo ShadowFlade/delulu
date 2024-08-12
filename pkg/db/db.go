@@ -27,6 +27,7 @@ type Db struct {
 	db              *sqlx.DB
 	tx              *sqlx.Tx
 	dbName          string
+    dbHost             string
 	login           string
 	password        string
 	statisticsTable string
@@ -39,16 +40,24 @@ func (d *Db) Connect() *sqlx.DB {
 	if err != nil {
 		panic(err)
 	}
+
+
 	if err := env.Load("./.env"); err != nil {
+		fmt.Println("error")
 		panic(err)
 	}
 	d.ipsTable = env.Get("DB_IPS_TABLE", "mom")
 	d.statisticsTable = env.Get("DB_STATISTICS_TABLE", ";)")
 	d.login = env.Get("DB_LOGIN", "i")
-	d.password = env.Get("DB_PASS", "fucked")
+	d.password = env.Get("DB_PASS", "")
 	d.dbName = env.Get("DB_NAME", "urmom")
+	d.dbHost = env.Get("DB_HOST","host");
+	_, err = fmt.Println(d.password,d.login,d.dbName,d.dbHost);
+	if err !=nil {
+	    fmt.Println(err)
+	}
 
-	connectStr := fmt.Sprintf("%s:@(127.0.0.1:3306)/%s", d.login, d.dbName)
+	connectStr := fmt.Sprintf("%s:%s@(127.0.0.1:3306)/%s", d.login, d.password, d.dbName)
 	db, err := sqlx.Connect("mysql", connectStr)
 
 	d.checkAndCreateNewStructure(*db)

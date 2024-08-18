@@ -432,7 +432,7 @@ func (s *IStats) CalcChance(minAge int, maxAge int, race string, height int, mon
 	}
 
 	chance := heightChance * ageChance * marriedChance * salaryChance * raceChance
-	chance = float32(int(chance*1000)) / 1000
+	chance = float32(int(chance*10000000)) / 10000000
 	return chance
 }
 

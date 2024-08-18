@@ -3,6 +3,7 @@ package pkg
 import (
 	"delulu/pkg/data"
 	"delulu/pkg/db"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -172,6 +173,7 @@ func (this *Handlers) Result(c echo.Context) error {
 		return err
 	}
 
+    fmt.Println("should be rendering")
 	c.Render(200, "index", formResults)
 	return nil
 }
@@ -204,7 +206,9 @@ func (this *Handlers) Feedback(c echo.Context) error {
 
 func (this *Handlers) CaptchaCheck(c echo.Context) error {
 	recSecret := env.Get("RECAPTCHA_SECRET", "")
+
 	formParams, err := c.FormParams()
+
 	data := url.Values{}
 	data.Add("response", formParams.Get("token"))
 	data.Add("secret", recSecret)
@@ -220,10 +224,22 @@ func (this *Handlers) CaptchaCheck(c echo.Context) error {
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
+	type CaptchaResponse struct {
+		Success bool    `json:"success"`
+		Score   float32 `json:"score"`
+		Action  string  `json:"action"`
+	}
+	var captchaResponse CaptchaResponse
+	error := json.Unmarshal(body, &captchaResponse)
 
+	if error != nil {
+		c.Logger().Fatal(error)
+		panic(error)
+	}
+
+	// Read the response body
 	if err != nil {
 		c.Logger().Fatal("error reading response body")
 	}
-
-	return c.JSON(http.StatusOK, body)
+	return c.JSON(http.StatusOK, captchaResponse)
 }

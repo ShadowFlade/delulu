@@ -96,8 +96,8 @@ function initForms() {
         e.preventDefault();
         grecaptcha.ready(function() {
             console.log(window.recaptchaSitekey, " recaptchaSitekey")
-            grecaptcha.execute(window.recaptchaSitekey, { action: 'submit' }).then(function(token) {
-                console.log(token," token")
+            grecaptcha.execute(window.recaptchaSitekey, { action: 'submit' }).then(async function(token) {
+                console.log(token, " token")
                 const requestData = {
                     method: "POST",
                     // headers: { "Content-Type": "application/json", "Accept": "application/json" },
@@ -105,7 +105,13 @@ function initForms() {
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: `token=${token}`
                 }
-                const data = fetch('/captcha_check', requestData)
+                const resp = await fetch('/captcha_check', requestData)
+                const data = await resp.json()
+                if (data.success) {
+                    console.log('form', form)
+                    form.submit()
+                }
+
             });
         });
 

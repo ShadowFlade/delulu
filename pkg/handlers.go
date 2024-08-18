@@ -1,10 +1,8 @@
 package pkg
 
 import (
-	"bytes"
 	"delulu/pkg/data"
 	"delulu/pkg/db"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -12,6 +10,8 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+
+	"net/url"
 
 	"github.com/gofor-little/env"
 	"github.com/labstack/echo/v4"
@@ -204,31 +204,26 @@ func (this *Handlers) Feedback(c echo.Context) error {
 
 func (this *Handlers) CaptchaCheck(c echo.Context) error {
 	recSecret := env.Get("RECAPTCHA_SECRET", "")
-
 	formParams, err := c.FormParams()
+	data := url.Values{}
+	data.Add("response", formParams.Get("token"))
+	data.Add("secret", recSecret)
+	rawQuery := data.Encode()
+	urlStr := fmt.Sprintf("%v?%s", "https://www.google.com/recaptcha/api/siteverify", rawQuery)
 
-	captchaBody := map[string]string{
-		"response": formParams.Get("token"),
-		"secret":   recSecret,
-	}
-
-	jsonValue, _ := json.Marshal(captchaBody)
-
-	fmt.Println(formParams.Get("token"))
-	fmt.Println(string(jsonValue), " json value")
-	resp, err := http.Post("https://www.google.com/recaptcha/api/siteverify", "application/json", bytes.NewBuffer(jsonValue))
+	client := &http.Client{}
+	r, _ := http.NewRequest("POST", urlStr, nil)
+	resp, _ := client.Do(r)
 
 	if err != nil {
-		c.Logger().Fatal("json error post")
+		return err
 	}
-
-	// Read the response body
-	defer resp.Body.Close() // Ensure the response body is closed
+	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 
 	if err != nil {
 		c.Logger().Fatal("error reading response body")
 	}
-	fmt.Println(string(body), " body")
+
 	return c.JSON(http.StatusOK, body)
 }

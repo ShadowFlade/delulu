@@ -64,7 +64,6 @@ func main() {
 			RecaptchaSitekey: env.Get("RECAPTCHA_SITEKEY", ""),
 		})
 	})
-	fmt.Println(env.Get("RECAPTCHA_SITEKEY", ""))
 
 	e.GET("/"+pkg.Pages.RESULT, handlers.Result)
 	e.GET("/"+pkg.Pages.ABOUT, func(c echo.Context) error {

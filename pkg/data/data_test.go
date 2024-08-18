@@ -3,6 +3,5 @@ package data
 import "testing"
 
 func TestSalaryCalc(t *testing.T) {
-    stats := IStats{}
-    privateCalcHeightChange := stats
+//    stats := IStats{}
 }

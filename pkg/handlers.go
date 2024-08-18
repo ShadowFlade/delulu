@@ -27,17 +27,18 @@ var raceMap = map[string]string{
 }
 
 type FormResults struct {
-	List      []template.HTML
-	Age       int
-	Race      string
-	Height    int
-	Money     int
-	IsMarried bool
-	Chance    float32
-	Score     int
-	Img       string
-	Page      string
-	Text      string
+	List             []template.HTML
+	Age              int
+	Race             string
+	Height           int
+	Money            int
+	IsMarried        bool
+	Chance           float32
+	Score            int
+	Img              string
+	Page             string
+	Text             string
+	RecaptchaSitekey string
 }
 type Handlers struct {
 }
@@ -138,13 +139,14 @@ func (this *Handlers) Result(c echo.Context) error {
 	}
 
 	formResults := FormResults{
-		List:      list,
-		IsMarried: excludeMarried,
-		Chance:    chance,
-		Score:     score,
-		Img:       img,
-		Text:      text,
-		Page:      Pages.RESULT,
+		List:             list,
+		IsMarried:        excludeMarried,
+		Chance:           chance,
+		Score:            score,
+		Img:              img,
+		Text:             text,
+		Page:             Pages.RESULT,
+		RecaptchaSitekey: env.Get("RECAPTCHA_SITEKEY", ""),
 	}
 	db := db.Db{}
 	db.Connect()
@@ -173,9 +175,8 @@ func (this *Handlers) Result(c echo.Context) error {
 		return err
 	}
 
-    fmt.Println("should be rendering")
-	c.Render(200, "index", formResults)
-	return nil
+	fmt.Println("should be rendering")
+	return c.Render(200, "index", formResults)
 }
 
 func (this *Handlers) Feedback(c echo.Context) error {

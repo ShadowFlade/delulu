@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/gofor-little/env"
 	"delulu/pkg"
 	"delulu/pkg/db"
+	"fmt"
+	"github.com/gofor-little/env"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"html/template"
 	"io"
-    "fmt"
 )
 
 type Templates struct {
@@ -51,12 +51,20 @@ func main() {
 
 	e.GET("/", func(c echo.Context) error {
 		return c.Render(200, "index", struct {
-			Page   string
-			Header string
-			Age1   int
-			Age2   int
-		}{Page: "index", Header: "header", Age1: 20, Age2: 30})
+			Page             string
+			Header           string
+			Age1             int
+			Age2             int
+			RecaptchaSitekey string
+		}{
+			Page:             "index",
+			Header:           "header",
+			Age1:             20,
+			Age2:             30,
+			RecaptchaSitekey: env.Get("RECAPTCHA_SITEKEY", ""),
+		})
 	})
+	fmt.Println(env.Get("RECAPTCHA_SITEKEY", ""))
 
 	e.GET("/"+pkg.Pages.RESULT, handlers.Result)
 	e.GET("/"+pkg.Pages.ABOUT, func(c echo.Context) error {
@@ -73,7 +81,8 @@ func main() {
 		return nil
 	})
 
-    ipPort := env.Get("IP_PORT",":3000")
+	ipPort := env.Get("IP_PORT", ":3000")
 	e.POST("/"+pkg.Pages.FEEDBACK, handlers.Feedback)
+	e.POST("/captcha_check", handlers.CaptchaCheck)
 	e.Logger.Fatal(e.Start(ipPort))
 }

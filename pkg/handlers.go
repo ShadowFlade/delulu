@@ -1,14 +1,20 @@
 package pkg
 
 import (
+	"bytes"
 	"delulu/pkg/data"
 	"delulu/pkg/db"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/labstack/echo/v4"
 	"html/template"
+	"io"
 	"math/rand"
+	"net/http"
 	"strconv"
+
+	"github.com/gofor-little/env"
+	"github.com/labstack/echo/v4"
 )
 
 var raceMap = map[string]string{
@@ -194,4 +200,35 @@ func (this *Handlers) Feedback(c echo.Context) error {
 
 	return nil
 
+}
+
+func (this *Handlers) CaptchaCheck(c echo.Context) error {
+	recSecret := env.Get("RECAPTCHA_SECRET", "")
+
+	formParams, err := c.FormParams()
+
+	captchaBody := map[string]string{
+		"response": formParams.Get("token"),
+		"secret":   recSecret,
+	}
+
+	jsonValue, _ := json.Marshal(captchaBody)
+
+	fmt.Println(formParams.Get("token"))
+	fmt.Println(string(jsonValue), " json value")
+	resp, err := http.Post("https://www.google.com/recaptcha/api/siteverify", "application/json", bytes.NewBuffer(jsonValue))
+
+	if err != nil {
+		c.Logger().Fatal("json error post")
+	}
+
+	// Read the response body
+	defer resp.Body.Close() // Ensure the response body is closed
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		c.Logger().Fatal("error reading response body")
+	}
+	fmt.Println(string(body), " body")
+	return c.JSON(http.StatusOK, body)
 }

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     initSliders();
     initFeedbackForm();
+    initForms();
 });
 
 function calcTooltipTranslate(rangeEl, rangeLabelEl) {
@@ -88,4 +89,27 @@ function initFeedbackForm() {
         })
     });
 }
+function initForms() {
+    const forms = document.querySelectorAll('form');
+    console.log(forms, 'forms')
+    forms.forEach(form => form.addEventListener("submit", e => {
+        e.preventDefault();
+        grecaptcha.ready(function() {
+            console.log(window.recaptchaSitekey, " recaptchaSitekey")
+            grecaptcha.execute(window.recaptchaSitekey, { action: 'submit' }).then(function(token) {
+                console.log(token," token")
+                const requestData = {
+                    method: "POST",
+                    // headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    // body: JSON.stringify({ token }), try this also
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `token=${token}`
+                }
+                const data = fetch('/captcha_check', requestData)
+            });
+        });
 
+
+    })
+    )
+}

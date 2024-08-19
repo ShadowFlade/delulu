@@ -385,7 +385,7 @@ func (s *IStats) calcAvgSalaryPerAge(age int) (float64, float64) {
 	var manSalaryMultiplier = 1.15 //there is stats about ppl in general, mens salary a bit higher
 	maxSalary := 0
 
-    //iterating over spheres
+	//iterating over spheres
 	for _, v := range s.Salary {
 		isSalaryChanging := (v.Salary.Mid - v.Salary.End) > 0
 		isShouldSalaryRise := age > v.Age.Start && age <= v.Age.Mid

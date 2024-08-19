@@ -44,6 +44,7 @@ type Handlers struct {
 }
 
 func (this *Handlers) Result(c echo.Context) error {
+    fmt.Println(c.Request().Header.Get("sec-fetch-site"))
 	minAge, minAgeErr := strconv.Atoi(c.QueryParam("age-min"))
 	maxAge, maxAgeErr := strconv.Atoi(c.QueryParam("age-max"))
 	race := c.QueryParam("race")

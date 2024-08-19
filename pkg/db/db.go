@@ -51,7 +51,7 @@ func (d *Db) Connect() *sqlx.DB {
 	d.password = env.Get("DB_PASS", "")
 	d.dbName = env.Get("DB_NAME", "urmom")
 	d.dbHost = env.Get("DB_HOST", "host")
-	_, err = fmt.Println(d.password, d.login, d.dbName, d.dbHost," passwords")
+	_, err = fmt.Println(d.password, d.login, d.dbName, d.dbHost, " passwords")
 
 	if err != nil {
 		fmt.Println(err)

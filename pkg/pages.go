@@ -5,7 +5,7 @@ type IPages struct {
 	RESULT    string
 	ABOUT     string
 	RESOURCES string
-	FEEDBACK string
+	FEEDBACK  string
 }
 
 var Pages = IPages{
@@ -13,5 +13,5 @@ var Pages = IPages{
 	RESULT:    "result",
 	ABOUT:     "about",
 	RESOURCES: "resources",
-	FEEDBACK: "feedback",
+	FEEDBACK:  "feedback",
 }

@@ -69,15 +69,24 @@ func main() {
 
 	e.GET("/"+pkg.Pages.RESULT, mware.IsSameSite(handlers.Result))
 	e.GET("/"+pkg.Pages.ABOUT, func(c echo.Context) error {
-		c.Render(200, "index", struct{ Page string }{
-			Page: pkg.Pages.ABOUT,
+		err := c.Render(200, "index", struct {
+			Page             string
+			RecaptchaSitekey string
+		}{
+			Page:             pkg.Pages.ABOUT,
+			RecaptchaSitekey: env.Get("RECAPTCHA_SITEKEY", ""),
 		})
+		fmt.Println(err, " error")
 		return nil
 	})
 
 	e.GET("/"+pkg.Pages.RESOURCES, func(c echo.Context) error {
-		c.Render(200, "index", struct{ Page string }{
-			Page: pkg.Pages.RESOURCES,
+		c.Render(200, "index", struct {
+			Page             string
+			RecaptchaSitekey string
+		}{
+			Page:             pkg.Pages.RESOURCES,
+			RecaptchaSitekey: env.Get("RECAPTCHA_SITEKEY", ""),
 		})
 		return nil
 	})

@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/gofor-little/env"
 	"github.com/labstack/echo/v4"
@@ -31,27 +31,36 @@ const (
 )
 
 func get_hostname_fqdn() (string, error) {
-    cmd := exec.Command("/bin/hostname", "-f")
-    var out bytes.Buffer
-    cmd.Stdout = &out
-    err := cmd.Run()
-    if err != nil {
-        return  "", fmt.Errorf("Error when get_hostname_fqdn: %v", err)
-    }
-    fqdn := out.String()
-    fqdn = fqdn[:len(fqdn)-1] // removing EOL
+	cmd := exec.Command("/bin/hostname", "-f")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		return "", fmt.Errorf("Error when get_hostname_fqdn: %v", err)
+	}
+	fqdn := out.String()
+	fqdn = fqdn[:len(fqdn)-1] // removing EOL
 
-    return fqdn, nil
+	return fqdn, nil
 }
 func IsSameSite(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		is := c.Request().Header.Get("sec-fetch-site") == "same-origin"
+		mode := env.Get("MODE", "prod")
+		header := c.Request().Header
+		var isSameUrl bool
+
+		if mode == "prod" {
+			isSameUrl = strings.Contains(header.Get("host"), header.Get("remote_ip"))
+		} else {
+
+			isSameUrl = true
+		}
+
+		fmt.Println(header.Get("host"), header.Get("remote_ip"), "hostst")
 		cookieState := validateCookie(c.Response().Writer, c.Request())
 
-		hostname, _ := get_hostname_fqdn()
-		fmt.Println("is,cookiestate", is, cookieState, c.Request().Header.Get("sec-fetch-site"), c.Request().Header, hostname)
-		if is && cookieState == COOKIE_VALID || cookieState == COOKIE_EMPTY {
+		if isSameUrl && cookieState == COOKIE_VALID || cookieState == COOKIE_EMPTY {
 			return next(c)
 		} else {
 			return c.String(http.StatusBadRequest, "suck it")

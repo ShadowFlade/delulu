@@ -51,7 +51,7 @@ func main() {
 	e.File("/tcrs-moving-tooltip.min.js", "node_modules/toolcool-range-slider/dist/plugins/tcrs-moving-tooltip.min.js")
 	handlers := pkg.Handlers{}
 
-	e.GET("/", func(c echo.Context) error {
+	e.GET("/", mware.IsSameSite(func(c echo.Context) error {
 		return c.Render(200, "index", struct {
 			Page             string
 			Header           string
@@ -65,10 +65,10 @@ func main() {
 			Age2:             30,
 			RecaptchaSitekey: env.Get("RECAPTCHA_SITEKEY", ""),
 		})
-	})
+	}))
 
 	e.GET("/"+pkg.Pages.RESULT, mware.IsSameSite(handlers.Result))
-	e.GET("/"+pkg.Pages.ABOUT, func(c echo.Context) error {
+	e.GET("/"+pkg.Pages.ABOUT, mware.IsSameSite(func(c echo.Context) error {
 		err := c.Render(200, "index", struct {
 			Page             string
 			RecaptchaSitekey string
@@ -78,9 +78,9 @@ func main() {
 		})
 		fmt.Println(err, " error")
 		return nil
-	})
+	}))
 
-	e.GET("/"+pkg.Pages.RESOURCES, func(c echo.Context) error {
+	e.GET("/"+pkg.Pages.RESOURCES, mware.IsSameSite(func(c echo.Context) error {
 		c.Render(200, "index", struct {
 			Page             string
 			RecaptchaSitekey string
@@ -89,10 +89,10 @@ func main() {
 			RecaptchaSitekey: env.Get("RECAPTCHA_SITEKEY", ""),
 		})
 		return nil
-	})
+	}))
 
 	ipPort := env.Get("IP_PORT", ":3000")
-	e.POST("/"+pkg.Pages.FEEDBACK, handlers.Feedback)
-	e.POST("/captcha_check", handlers.CaptchaCheck)
+	e.POST("/"+pkg.Pages.FEEDBACK, mware.IsSameSite(handlers.Feedback))
+	e.POST("/captcha_check", mware.IsSameSite(handlers.CaptchaCheck))
 	e.Logger.Fatal(e.Start(ipPort))
 }

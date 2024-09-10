@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
@@ -10,7 +9,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os/exec"
 	"strings"
 
 	"github.com/gofor-little/env"
@@ -30,19 +28,6 @@ const (
 	COOKIE_INVALID
 )
 
-func get_hostname_fqdn() (string, error) {
-	cmd := exec.Command("/bin/hostname", "-f")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
-	if err != nil {
-		return "", fmt.Errorf("Error when get_hostname_fqdn: %v", err)
-	}
-	fqdn := out.String()
-	fqdn = fqdn[:len(fqdn)-1] // removing EOL
-
-	return fqdn, nil
-}
 func IsSameSite(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 

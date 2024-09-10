@@ -51,16 +51,19 @@ func IsSameSite(next echo.HandlerFunc) echo.HandlerFunc {
 		var isSameUrl bool
 
 		if mode == "prod" {
-			isSameUrl = strings.Contains(header.Get("host"), header.Get("remote_ip"))
+            fmt.Println(header,"X-HOST")
+            remoteIp := header.Get("X-REAL-IP")
+            host := header.Get("X-HOST")
+            fmt.Println(host, remoteIp, "remte ip")
+            isSameUrl = strings.Contains(host, remoteIp)
 		} else {
-
 			isSameUrl = true
 		}
 
-		fmt.Println(header.Get("host"), header.Get("remote_ip"), "hostst")
 		cookieState := validateCookie(c.Response().Writer, c.Request())
+		fmt.Println(cookieState,isSameUrl,"cooke state")
 
-		if isSameUrl && cookieState == COOKIE_VALID || cookieState == COOKIE_EMPTY {
+		if cookieState == COOKIE_VALID || cookieState == COOKIE_EMPTY {
 			return next(c)
 		} else {
 			return c.String(http.StatusBadRequest, "suck it")

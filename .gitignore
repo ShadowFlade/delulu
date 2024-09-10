@@ -28,3 +28,6 @@ node_modules/
 .env.local
 *.sql
 !create_tables.sql
+./main
+./cmd/main
+./cmd/cmd

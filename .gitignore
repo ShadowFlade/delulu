@@ -39,4 +39,5 @@ docker-compose.yml
 main
 pkg/mod/
 pkg/sumdb/
-
+key
+key.pub

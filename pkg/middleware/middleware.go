@@ -30,16 +30,16 @@ const (
 
 func IsSameSite(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-
+        path := c.Request().URL.Path
 		mode := env.Get("MODE", "prod")
 		header := c.Request().Header
 		var isSameUrl bool
 
-		if mode == "prod" {
+		if mode == "prod" && path != "/" {
             fmt.Println(header,"X-HOST")
             remoteIp := header.Get("X-REAL-IP")
             host := header.Get("X-HOST")
-            fmt.Println(host, remoteIp, "remte ip")
+            fmt.Println(host, remoteIp, "remte ip", )
             isSameUrl = strings.Contains(host, remoteIp)
 		} else {
 			isSameUrl = true

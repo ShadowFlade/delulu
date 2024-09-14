@@ -31,7 +31,7 @@ const (
 func IsSameSite(next echo.HandlerFunc) echo.HandlerFunc {
 
 	return func(c echo.Context) error {
-        path := c.Request().URL.Path
+		path := c.Request().URL.Path
 		mode := env.Get("MODE", "prod")
 		header := c.Request().Header
 		parsedUrl, err := url.Parse(header.Get("Referer"));

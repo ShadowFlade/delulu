@@ -9,10 +9,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/gofor-little/env"
 	"github.com/labstack/echo/v4"
+	"net/url"
 )
 
 var (
@@ -29,25 +29,29 @@ const (
 )
 
 func IsSameSite(next echo.HandlerFunc) echo.HandlerFunc {
+
 	return func(c echo.Context) error {
 		path := c.Request().URL.Path
+		mode := env.Get("MODE", "prod")
 		header := c.Request().Header
-		var isSameUrl bool
+		parsedUrl, err := url.Parse(header.Get("Referer"));
+		if err != nil {
+                panic(err)
+        }
+        fmt.Println(header,parsedUrl,parsedUrl.Path, "remte ip", )
 
-		fmt.Println(header,  "remte ip")
-		if path == "/result" {
-			fmt.Println(header, "X-HOST")
-			remoteIp := header.Get("X-REAL-IP")
-			host := header.Get("X-HOST")
-			isSameUrl = strings.Contains(host, remoteIp)
-		} else {
-			isSameUrl = true
+		isValid := true;
+
+		if mode == "prod" && path == "/result" && parsedUrl.Path == "/" {
+            isValid = true
+		} else if mode =="prod" && path == "/result" && parsedUrl.Path != "/" {
+			isValid = false
+			panic("you suck")
 		}
 
 		cookieState := validateCookie(c.Response().Writer, c.Request())
-		fmt.Println(cookieState, isSameUrl, "cooke state")
 
-		if cookieState == COOKIE_VALID || cookieState == COOKIE_EMPTY {
+		if (cookieState == COOKIE_VALID || cookieState == COOKIE_EMPTY)  && isValid{
 			return next(c)
 		} else {
 			return c.String(http.StatusBadRequest, "suck it")

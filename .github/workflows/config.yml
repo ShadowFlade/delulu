@@ -1,9 +1,9 @@
 name: prod merge
-  on:
-    push:
-      branches:
-        - prod
-jobs:
+
+on:
+  push:
+    branches:
+      - prod
   deploy:
     runs-on: ubuntu-latest
 

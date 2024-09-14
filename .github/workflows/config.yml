@@ -19,7 +19,7 @@ jobs:
 
     - name: Deploy to server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o "PasswordAuthentication yes" ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
           cd ${{secrets.GH_ACTIONS_PROJECT_PATH}}
           git pull origin prod
           go build ./cmd/main.go

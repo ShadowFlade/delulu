@@ -30,23 +30,22 @@ const (
 
 func IsSameSite(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-        path := c.Request().URL.Path
-		mode := env.Get("MODE", "prod")
+		path := c.Request().URL.Path
 		header := c.Request().Header
 		var isSameUrl bool
 
-		if mode == "prod" && path != "/" {
-            fmt.Println(header,"X-HOST")
-            remoteIp := header.Get("X-REAL-IP")
-            host := header.Get("X-HOST")
-            fmt.Println(host, remoteIp, "remte ip", )
-            isSameUrl = strings.Contains(host, remoteIp)
+		fmt.Println(header,  "remte ip")
+		if path == "/result" {
+			fmt.Println(header, "X-HOST")
+			remoteIp := header.Get("X-REAL-IP")
+			host := header.Get("X-HOST")
+			isSameUrl = strings.Contains(host, remoteIp)
 		} else {
 			isSameUrl = true
 		}
 
 		cookieState := validateCookie(c.Response().Writer, c.Request())
-		fmt.Println(cookieState,isSameUrl,"cooke state")
+		fmt.Println(cookieState, isSameUrl, "cooke state")
 
 		if cookieState == COOKIE_VALID || cookieState == COOKIE_EMPTY {
 			return next(c)

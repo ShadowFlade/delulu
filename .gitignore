@@ -31,3 +31,12 @@ node_modules/
 ./main
 ./cmd/main
 ./cmd/cmd
+.idea/
+Dockerfile
+app
+cmd/cmd
+docker-compose.yml
+main
+pkg/mod/
+pkg/sumdb/
+

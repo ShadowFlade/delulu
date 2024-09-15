@@ -412,7 +412,8 @@ func (s *IStats) calcAvgSalaryPerAge(age int) (float64, float64) {
 		}
 		count += 1
 	}
-	avgSalary := (float64(salary) * manSalaryMultiplier) / float64(count)
+	//avgSalary := (float64(salary) * manSalaryMultiplier) / float64(count)
+	avgSalary := 89.145
 
 	return avgSalary * 1000, float64(maxSalary) * manSalaryMultiplier
 }

@@ -25,7 +25,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
           cd ${{secrets.GH_ACTIONS_PROJECT_PATH}}
           git pull origin prod
-          go build ./cmd/main.go
+          /usr/local/go/bin/go build ./cmd/main.go
           service areyoudelusional restart
           echo "Deployment completed and service restarted."
         EOF
